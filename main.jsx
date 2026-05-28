@@ -32,20 +32,38 @@ window.LUMIO_SESSION = {
 function NameScreen({ onConfirm }) {
   const [prenom, setPrenom] = useRootState('');
   const [nom, setNom] = useRootState('');
+  const [email, setEmail] = useRootState('');
   const [shake, setShake] = useRootState(false);
+  const [emailError, setEmailError] = useRootState('');
+
+  const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
   const confirm = () => {
+    setEmailError('');
     if (!prenom.trim()) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+    if (!email.trim() || !isValidEmail(email)) {
+      setEmailError('Un email valide est requis pour recevoir ton portfolio.');
       setShake(true);
       setTimeout(() => setShake(false), 500);
       return;
     }
     const full = `${prenom.trim()}${nom.trim() ? ' ' + nom.trim() : ''}`;
     window.LUMIO_DATA.student.name = full;
-    window.LUMIO_DATA.student.email = `${prenom.trim().toLowerCase()}.${(nom.trim() || 'consultant').toLowerCase()}@consult.fr`;
+    window.LUMIO_DATA.student.email = email.trim().toLowerCase();
     window.LUMIO_DATA.student.initial = prenom.trim()[0].toUpperCase();
-    onConfirm(full);
+    onConfirm(full, email.trim().toLowerCase());
   };
+
+  const inputStyle = (filled) => ({
+    width: '100%', padding: '10px 14px',
+    border: filled ? '1.5px solid rgba(255,255,255,0.5)' : '1.5px solid rgba(255,255,255,0.2)',
+    borderRadius: 10, background: 'rgba(255,255,255,0.15)',
+    color: 'white', fontSize: 14, outline: 'none', transition: 'border-color .2s'
+  });
 
   return (
     <div style={{
@@ -60,7 +78,7 @@ function NameScreen({ onConfirm }) {
     }}>
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>PAC · MSMC · BC2</div>
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 200, letterSpacing: '-0.02em', marginBottom: 8, textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>Lumio Health</div>
-      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 48 }}>Une recommandation à défendre</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 40 }}>Une recommandation à défendre</div>
 
       <div style={{
         background: 'rgba(255,255,255,0.12)',
@@ -68,39 +86,51 @@ function NameScreen({ onConfirm }) {
         border: '1px solid rgba(255,255,255,0.25)',
         borderRadius: 16,
         padding: '32px 36px',
-        width: '100%', maxWidth: 420,
+        width: '100%', maxWidth: 440,
         textAlign: 'center',
         animation: shake ? 'shake 0.4s ease' : 'none'
       }}>
-        <div style={{ fontSize: 13, opacity: 0.85, marginBottom: 24, lineHeight: 1.6 }}>
+        <div style={{ fontSize: 13, opacity: 0.85, marginBottom: 22, lineHeight: 1.6 }}>
           Tu vas entrer dans ce dossier en tant que consultant·e externe.<br/>
-          <span style={{ opacity: 0.7 }}>Comment t'appelles-tu ?</span>
+          <span style={{ opacity: 0.7 }}>Identifie-toi pour recevoir ton portfolio de compétences.</span>
         </div>
 
-        <div style={{ display: 'flex', gap: 10, marginBottom: 20, width: '100%' }}>
+        {/* Prénom + Nom */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 12, width: '100%' }}>
           <input
             value={prenom}
             onChange={e => setPrenom(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') confirm(); }}
             placeholder="Prénom *"
             autoFocus
-            style={{
-              flex: 1, minWidth: 0, padding: '10px 14px',
-              border: prenom.trim() ? '1.5px solid rgba(255,255,255,0.5)' : '1.5px solid rgba(255,255,255,0.2)',
-              borderRadius: 10, background: 'rgba(255,255,255,0.15)',
-              color: 'white', fontSize: 14, outline: 'none', transition: 'border-color .2s'
-            }}
+            className="placeholder-dark"
+            style={inputStyle(prenom.trim())}
           />
           <input
             value={nom}
             onChange={e => setNom(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') confirm(); }}
             placeholder="Nom"
+            className="placeholder-dark"
+            style={inputStyle(nom.trim())}
+          />
+        </div>
+
+        {/* Email école */}
+        <div style={{ marginBottom: 20 }}>
+          <input
+            type="email"
+            value={email}
+            onChange={e => { setEmail(e.target.value); setEmailError(''); }}
+            onKeyDown={e => { if (e.key === 'Enter') confirm(); }}
+            placeholder="Email école (ex: prenom.nom@emineo.fr)"
+            className="placeholder-dark"
             style={{
-              flex: 1, minWidth: 0, padding: '10px 14px',
-              border: '1.5px solid rgba(255,255,255,0.2)',
-              borderRadius: 10, background: 'rgba(255,255,255,0.15)',
-              color: 'white', fontSize: 14, outline: 'none'
+              ...inputStyle(isValidEmail(email)),
+              width: '100%',
+              border: isValidEmail(email)
+                ? '1.5px solid rgba(255,255,255,0.5)'
+                : '1.5px solid rgba(255,255,255,0.2)'
             }}
           />
         </div>
@@ -119,8 +149,10 @@ function NameScreen({ onConfirm }) {
         >
           Entrer dans l'affaire →
         </button>
-        {!prenom.trim() && (
-          <div style={{ fontSize: 11, opacity: 0.5, marginTop: 10 }}>Le prénom est requis</div>
+        {(!prenom.trim() || emailError) && (
+          <div style={{ fontSize: 11, opacity: 0.5, marginTop: 10 }}>
+            {emailError || 'Le prénom est requis'}
+          </div>
         )}
       </div>
     </div>
@@ -338,8 +370,9 @@ function Root() {
       setStudentName(n);
       setSessionId(savedId);
       if (session.timerStart) setTimerStart(session.timerStart);
-      // Patcher les données avec le nom sauvegardé
+      // Patcher les données avec le nom et l'email sauvegardés
       window.LUMIO_DATA.student.name = n;
+      if (session.studentEmail) window.LUMIO_DATA.student.email = session.studentEmail;
       window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${n.split(' ')[0]},`);
       window.LUMIO_DATA.slackMessages.initial[0].text = `${n.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
       // Reprendre directement sur le bureau
@@ -347,15 +380,16 @@ function Root() {
     });
   }, []);
 
-  const handleNameConfirm = (name) => {
+  const handleNameConfirm = (name, studentEmail) => {
     const sid = makeSessionId(name + Date.now());
     localStorage.setItem('lumio_sid', sid);
     setSessionId(sid);
     setStudentName(name);
     window.LUMIO_DATA.student.name = name;
+    window.LUMIO_DATA.student.email = studentEmail || `${name.split(' ')[0].toLowerCase()}@consult.fr`;
     window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${name.split(' ')[0]},`);
     window.LUMIO_DATA.slackMessages.initial[0].text = `${name.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
-    window.LUMIO_SESSION.save(sid, { studentName: name, phase: 'login' });
+    window.LUMIO_SESSION.save(sid, { studentName: name, studentEmail: studentEmail || '', phase: 'login' });
     setShowLogin(true);
     setPhase('login');
   };
