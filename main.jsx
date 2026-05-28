@@ -58,9 +58,9 @@ function NameScreen({ onConfirm }) {
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       color: 'white', padding: '2rem'
     }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>Clinique BEC · MSMC · BC1</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>PAC · MSMC · BC2</div>
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 200, letterSpacing: '-0.02em', marginBottom: 8, textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>Lumio Health</div>
-      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 48 }}>Une affaire à résoudre</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 48 }}>Une recommandation à défendre</div>
 
       <div style={{
         background: 'rgba(255,255,255,0.12)',
@@ -151,8 +151,8 @@ function LoginScreen({ onLogin, studentName }) {
       animation: stage === 'unlocking' ? 'fadeOutLogin 1.1s forwards' : 'none'
     }}>
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.8, marginBottom: 8 }}>samedi 12 septembre 2026</div>
-        <div style={{ fontSize: 96, fontWeight: 200, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', lineHeight: 1, textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>08:14</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.8, marginBottom: 8 }}>lundi 12 octobre 2026</div>
+        <div style={{ fontSize: 96, fontWeight: 200, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', lineHeight: 1, textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>07:19</div>
       </div>
 
       <div style={{
@@ -237,12 +237,12 @@ function WelcomeBriefCard({ onClose, studentName }) {
         padding: '32px 36px', boxShadow: '0 30px 80px rgba(0,0,0,0.45)'
       }}>
         {/* Header */}
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.25em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 10 }}>Clinique BEC · MSMC RNCP 38504 · Bloc 1</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.25em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 10 }}>PAC · MSMC RNCP 38504 · Bloc 2</div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
           Bienvenue, {prenom}.
         </h1>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--ink-soft)', marginBottom: 10 }}>
-          Tu es <strong>{studentName}</strong>, consultant·e en stratégie de marque. Sonia Ferracci, Directrice Marketing de Lumio Health, t'a confié un audit de marque urgent. Tu as accès à un <strong>poste de mission dédié</strong> : lettre de mission, veille concurrentielle, note interne CEO, verbatims terrain — et quelques documents qui se contredisent. <em>À toi de trier.</em>
+          Tu es <strong>{studentName}</strong>, consultant·e stratégie marcom. Théo Marczak, CEO de Lumio Health, t'a confié une mission urgente : produire la <strong>recommandation stratégique</strong> que l'entreprise défendra vendredi devant son board d'investisseurs. Tu as accès à un poste de mission : email de Théo, email confidentiel de Jakob, deck board Q3, veille concurrentielle, verbatims terrain. <em>Jakob Rein attend une décision, pas une analyse.</em>
         </p>
 
         {/* Bloc temporel — central */}
@@ -277,8 +277,8 @@ function WelcomeBriefCard({ onClose, studentName }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { ico: '📄', txt: 'Tout ce que tu sais, c\'est dans les documents.' },
-              { ico: '🤐', txt: 'Le RP ne te dira pas "si c\'est juste". Il ne te dira pas par où commencer. Il observe.' },
-              { ico: '💬', txt: 'Quand tu as une hypothèse solide → Slack → Sonia. Pas avant.' },
+              { ico: '🤐', txt: 'Jakob ne te dira pas "si c\'est juste". Il teste chaque hypothèse. Il ne cherche pas à t\'aider — il protège son investissement.' },
+              { ico: '💬', txt: 'Quand tu as une hypothèse solide → Slack → Jakob. Sa réaction débloque la suite.' },
             ].map((r, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <span style={{ fontSize: 16, flexShrink: 0 }}>{r.ico}</span>
@@ -341,7 +341,7 @@ function Root() {
       // Patcher les données avec le nom sauvegardé
       window.LUMIO_DATA.student.name = n;
       window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${n.split(' ')[0]},`);
-      window.LUMIO_DATA.slackMessages.initial[0].text = `Salut ${n.split(' ')[0]} — bien reçu mon mail ?`;
+      window.LUMIO_DATA.slackMessages.initial[0].text = `${n.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
       // Reprendre directement sur le bureau
       setPhase('desktop');
     });
@@ -354,7 +354,7 @@ function Root() {
     setStudentName(name);
     window.LUMIO_DATA.student.name = name;
     window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${name.split(' ')[0]},`);
-    window.LUMIO_DATA.slackMessages.initial[0].text = `Salut ${name.split(' ')[0]} — bien reçu mon mail ?`;
+    window.LUMIO_DATA.slackMessages.initial[0].text = `${name.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
     window.LUMIO_SESSION.save(sid, { studentName: name, phase: 'login' });
     setShowLogin(true);
     setPhase('login');

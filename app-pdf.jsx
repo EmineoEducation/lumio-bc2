@@ -17,33 +17,33 @@ function GuideApp() {
 
   const tips = [
     {
-      day: 'J−18 · Entrée dans la mission',
+      day: 'J−4 · Entrée dans la mission',
       title: 'Par où commencer ?',
-      body: 'Tu as accès à 8 apps sur ce desktop. Elles contiennent toutes quelque chose d\'utile. Commence par Mail — Sonia Ferracci t\'a écrit hier soir. Sa lettre de mission est là.',
-      action: '→ Mail → Lettre de mission — Sonia Ferracci'
+      body: 'Théo Marczak t\'a écrit ce matin à 07h19. Sa lettre de mission est dans Mail. Lis-la en premier — c\'est là que la mission commence. Puis ouvre l\'email confidentiel de Jakob Rein.',
+      action: '→ Mail → Email de mission — Théo Marczak'
     },
     {
-      day: 'J−12 · Après lecture des documents',
+      day: 'J−3 · Après lecture des emails',
       title: 'Croiser les sources',
-      body: 'Tu remarqueras des contradictions entre les documents. C\'est voulu — c\'est le cœur du travail. Sonia parle de 230 clients. Théo dit 180. La certification MDR est "en cours" depuis un moment. Camille Ott sait des choses que les autres ne disent pas.',
-      action: '→ Mémos vocaux → 3 enregistrements de Camille Ott'
+      body: 'Tu vas trouver des contradictions. 4,1 % de churn dans le deck board vs 9 % selon Camille. "230 entreprises clientes" sur le site vs 180 références actives dans les vrais chiffres. La MDR "en cours selon calendrier prévu" dans le deck — et un 3e avis de non-conformité TÜV dans la note de Théo. C\'est le cœur du travail.',
+      action: '→ Aperçu → Deck Board Q3 / → Notes → Note interne Théo (CONFIDENTIEL)'
     },
     {
-      day: 'J−7 · Passer à l\'action',
-      title: 'Sonia attend une réaction',
-      body: 'Tu n\'as pas besoin d\'avoir tout compris pour écrire à Sonia. Envoie-lui ta première impression — même imparfaite. C\'est comme ça que la mission avance. Elle répondra, et la réponse t\'apportera de nouveaux éléments.',
-      action: '→ Slack → DM Sonia Ferracci'
+      day: 'J−2 · Passer à l\'action',
+      title: 'Jakob attend une hypothèse',
+      body: 'Tu n\'as pas besoin d\'avoir tout compris pour écrire à Jakob. Envoie-lui ta première lecture — même partielle. Il répondra en testant chaque point. C\'est comme ça qu\'on avance. Sonia et Camille sont aussi disponibles en DM.',
+      action: '→ Slack → DM Jakob Rein'
     },
     {
-      day: 'J−3 · Finaliser',
-      title: 'Rédiger le livrable',
-      body: 'L\'app Livrable t\'attend dans le dock (icône verte). Tu dois produire deux choses : une note de synthèse de veille stratégique et une plateforme de marque. Ce n\'est pas un résumé des documents — c\'est une prise de position professionnelle.',
+      day: 'J−1 · Finaliser',
+      title: 'Rédiger la recommandation',
+      body: 'L\'app Livrable t\'attend dans le dock (icône verte). Tu dois couvrir C.7 à C.12. Ce n\'est pas un résumé de documents — c\'est une prise de position professionnelle avec objectifs SMART, cibles, axes, canaux, évaluation de scénarios et projection budgétaire. Jakob doit pouvoir défendre ce document face à un investisseur.',
       action: '→ Dock → Livrable (icône verte avec coche)'
     },
     {
       day: 'En cas de blocage',
       title: 'Ce que tu cherches est dans ces apps',
-      body: 'Si tu tournes en rond, ouvre le Finder → Mission Lumio. Tous les documents sont là. Si tu ne sais pas quoi écrire à Sonia, commence par une phrase : "Après lecture du dossier, je pense que le vrai problème est…" et complète.',
+      body: 'Si tu tournes en rond, ouvre le Finder → Mission Lumio. Tous les documents sont là. Si tu ne sais pas quoi recommander, commence par écrire : "Le scénario que je recommande est… parce que…" et force-toi à compléter.',
       action: '→ Finder → Mission Lumio'
     }
   ];
@@ -51,8 +51,8 @@ function GuideApp() {
   return (
     <div style={G.app}>
       <div style={G.header}>
-        <div style={G.eyebrow}>Guide de mission · BC1 · PAC</div>
-        <div style={G.title}>Lumio Health — aide au parcours</div>
+        <div style={G.eyebrow}>Guide de mission · BC2 · PAC</div>
+        <div style={G.title}>Lumio Health — Board Northgate</div>
       </div>
       <div style={G.body}>
         <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', fontFamily: 'var(--font-display)', padding: '0 0 4px' }}>
@@ -67,16 +67,20 @@ function GuideApp() {
           </div>
         ))}
         <div style={G.divider} />
-        <div style={{ ...G.section, background: 'rgba(26,102,65,0.08)', borderColor: 'rgba(26,102,65,0.2)' }}>
-          <div style={{ ...G.sectionDay, color: 'rgba(26,102,65,0.8)' }}>Rappel · Livrable final</div>
+        <div style={{ ...G.section, background: 'rgba(27,58,107,0.12)', borderColor: 'rgba(27,58,107,0.25)' }}>
+          <div style={{ ...G.sectionDay, color: 'rgba(27,58,107,0.8)' }}>Rappel · Livrable final — C.7 à C.12</div>
           <div style={G.sectionTitle}>Ce que tu dois produire</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
             {[
-              ['C.1 / C.2', 'Note de synthèse veille — tendances réglementaires, concurrentielles, sociocomportementales. Chaque tendance qualifiée : opportunité ou risque pour Lumio.'],
-              ['C.3 → C.6', 'Plateforme de marque — territoire, proposition de valeur, cibles B2B / B2C différenciées, personnalité, engagements RSE. Cohérente avec les vraies contraintes (MDR, budget, 180 références actives).']
+              ['C.7', 'Objectifs SMART — qualitatifs et quantitatifs, datés, mesurables. Notoriété, leads, CA, délais.'],
+              ['C.8', 'Cibles & segmentation — cœur de cible caractérisé (descriptif, comportemental, affinitaire), cibles secondaires hiérarchisées.'],
+              ['C.9', 'Axes de communication — proposition de valeur, engagements RSE, adéquation aux cibles.'],
+              ['C.10', 'Canaux omnicanal — justifiés par les usages cibles, mix B2B / B2C si scénario hybride.'],
+              ['C.11', 'Évaluation des scénarios — au moins 2 scénarios comparés avec ROI estimé. Recommandation argumentée. Gabarit disponible.'],
+              ['C.12', 'Budget — projection chiffrée, postes de coûts, position explicite sur la tension 200K€/380K€.'],
             ].map(([badge, desc]) => (
               <div key={badge} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, padding: '2px 7px', background: 'rgba(26,102,65,0.2)', color: 'rgba(26,102,65,0.9)', borderRadius: 4, flexShrink: 0, marginTop: 2 }}>{badge}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, padding: '2px 7px', background: 'rgba(27,58,107,0.2)', color: 'rgba(100,150,220,0.9)', borderRadius: 4, flexShrink: 0, marginTop: 2 }}>{badge}</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>{desc}</div>
               </div>
             ))}
@@ -93,20 +97,32 @@ const { useState: usePdfState } = React;
 
 function PdfApp({ openGuide }) {
   const D = window.LUMIO_DATA;
-  const r = D.yanisReport;
+  const [activeDoc, setActiveDoc] = usePdfState('deck'); // 'deck' | 'veille'
   const [page, setPage] = usePdfState(1);
 
-  // Si openGuide, afficher le guide de mission
   if (openGuide) return <GuideApp />;
 
-  const totalPages = 4;
+  const deckPages = 5;
+  const veillePages = 4;
+  const totalPages = activeDoc === 'deck' ? deckPages : veillePages;
+
+  const switchDoc = (doc) => { setActiveDoc(doc); setPage(1); };
 
   return (
     <div style={pdfStyles.app}>
       <div style={pdfStyles.toolbar}>
-        <div style={pdfStyles.tbGroup}>
-          <button style={pdfStyles.tbBtn}>↩</button>
-          <button style={pdfStyles.tbBtn}>↪</button>
+        {/* Sélecteur de document */}
+        <div style={{ display: 'flex', gap: 4, marginRight: 8 }}>
+          <button
+            onClick={() => switchDoc('deck')}
+            style={{ ...pdfStyles.tbBtn, background: activeDoc === 'deck' ? 'rgba(27,58,107,0.15)' : 'transparent', fontWeight: activeDoc === 'deck' ? 700 : 400, color: activeDoc === 'deck' ? '#1b3a6b' : 'var(--ink-soft)' }}>
+            Deck Board Q3
+          </button>
+          <button
+            onClick={() => switchDoc('veille')}
+            style={{ ...pdfStyles.tbBtn, background: activeDoc === 'veille' ? 'rgba(196,66,15,0.12)' : 'transparent', fontWeight: activeDoc === 'veille' ? 700 : 400, color: activeDoc === 'veille' ? '#c4420f' : 'var(--ink-soft)' }}>
+            Veille Yassine ⚠
+          </button>
         </div>
         <div style={pdfStyles.tbDivider} />
         <div style={pdfStyles.tbGroup}>
@@ -128,13 +144,11 @@ function PdfApp({ openGuide }) {
 
       <div style={pdfStyles.body}>
         <div style={pdfStyles.thumbCol} className="scroll">
-          {[1,2,3,4].map(p => (
-            <div
-              key={p}
-              onClick={() => setPage(p)}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+            <div key={p} onClick={() => setPage(p)}
               style={{ ...pdfStyles.thumb, ...(page===p ? pdfStyles.thumbActive : {}) }}>
               <div style={pdfStyles.thumbPage}>
-                <div style={{ height: 4, background: '#1a2436', width: '70%', margin: '4px auto' }} />
+                <div style={{ height: 4, background: activeDoc === 'deck' ? '#1b3a6b' : '#1a2436', width: '70%', margin: '4px auto' }} />
                 <div style={{ height: 2, background: '#9a9ea8', width: '85%', margin: '3px auto' }} />
                 <div style={{ height: 2, background: '#9a9ea8', width: '85%', margin: '2px auto' }} />
                 <div style={{ height: 2, background: '#9a9ea8', width: '60%', margin: '2px auto' }} />
@@ -148,46 +162,86 @@ function PdfApp({ openGuide }) {
         </div>
 
         <div style={pdfStyles.pageWrap} className="scroll">
-          {page === 1 && <PdfPage1 r={r} />}
-          {page === 2 && <PdfPage2 r={r} />}
-          {page === 3 && <PdfPage3 r={r} />}
-          {page === 4 && <PdfPage4 r={r} />}
+          {activeDoc === 'deck' && <DeckBoardPage page={page} deck={D.deckBoard} />}
+          {activeDoc === 'veille' && <VeillePage page={page} r={D.yassineVeille} />}
         </div>
       </div>
     </div>
   );
 }
 
-const PdfPage1 = ({ r }) => (
-  <div style={pdfStyles.page}>
+// ── Deck Board Q3 ──────────────────────────────────────────────
+function DeckBoardPage({ page, deck }) {
+  const slide = deck.slides[page - 1];
+  const isFirst = page === 1;
+  return (
+    <div style={pdfStyles.page}>
+      {isFirst ? (
+        <>
+          <div style={{ background: '#1b3a6b', margin: '-50px -56px 36px', padding: '36px 56px 28px', color: 'white' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 10 }}>Confidentiel — Northgate Capital</div>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 400, color: 'white', marginBottom: 6, lineHeight: 1.2 }}>{deck.title}</h1>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>{deck.subtitle}</div>
+            <div style={{ marginTop: 16, fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{deck.date}</div>
+          </div>
+          <div style={{ background: '#f0f4fa', borderRadius: 6, padding: '14px 18px', marginBottom: 18, fontSize: 12, color: '#1b3a6b', fontFamily: 'var(--font-sans)', lineHeight: 1.6 }}>
+            📋 Ce deck est la version transmise à Northgate Capital pour la revue trimestrielle. Il contient les chiffres présentés par Sonia Ferracci — pas nécessairement les chiffres réels de terrain.
+          </div>
+        </>
+      ) : (
+        <div style={{ borderBottom: '2px solid #1b3a6b', paddingBottom: 10, marginBottom: 20 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.15em', color: '#1b3a6b', textTransform: 'uppercase' }}>Lumio Health · Board Q3 2026 · Confidentiel</div>
+        </div>
+      )}
+      <h2 style={{ ...pdfStyles.h2, borderBottomColor: '#1b3a6b', color: '#1b3a6b' }}>{slide?.titre}</h2>
+      <pre style={{ ...pdfStyles.p, fontFamily: 'var(--font-sans)', whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
+        {slide?.contenu}
+      </pre>
+      {page === 5 && (
+        <div style={{ marginTop: 24, padding: '12px 16px', background: '#fff8d8', border: '1px solid #c4420f', borderRadius: 4, fontSize: 11.5, color: '#5a3010', lineHeight: 1.6 }}>
+          ⚠ <strong>Note :</strong> L'écart budgétaire de 180 000 € entre le plafond Théo (200K€) et le budget Sonia (380K€) n'est pas résolu dans ce document. C'est à vous de le traiter.
+        </div>
+      )}
+      <div style={pdfStyles.pageNum}>— {page} —</div>
+    </div>
+  );
+}
+
+// ── Veille Yassine ────────────────────────────────────────────
+function VeillePage({ page, r }) {
+  return (
+    <div style={pdfStyles.page}>
+      {page === 1 && <VeillePage1 r={r} />}
+      {page === 2 && <VeillePage2 r={r} />}
+      {page === 3 && <VeillePage3 r={r} />}
+      {page === 4 && <VeillePage4 r={r} />}
+    </div>
+  );
+}
+
+const VeillePage1 = ({ r }) => (
+  <>
     <div style={{ borderBottom: '2px solid #1a2436', paddingBottom: 14, marginBottom: 24 }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', color: '#c4420f', textTransform: 'uppercase' }}>Note interne · Mai 2026 · Confidentiel</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', color: '#c4420f', textTransform: 'uppercase' }}>Note interne · Mars 2026 · ⚠ Document périmé</div>
     </div>
     <h1 style={pdfStyles.title}>{r.title}</h1>
     <div style={pdfStyles.byline}>{r.author} · {r.date}</div>
     <div style={pdfStyles.warningBox}>
-      ⚠ <strong>Document non relu</strong> — finalisé la veille de la fin de stage. Les chiffres et conclusions n'ont pas été validés par la direction. À utiliser avec précaution.
+      ⚠ <strong>{r.date}</strong> — Ce document date de mars 2026. Plusieurs informations ont évolué depuis (Neuroflow certifié MDR IIa, appel d'offres mutuelles, 3e avis TÜV). À croiser avec les sources récentes.
     </div>
     <h2 style={pdfStyles.h2}>Introduction</h2>
-    <p style={pdfStyles.p}>Le marché mondial des wearables santé dépasse <strong>95 Md$</strong> en 2025 et croît à un rythme de <strong>+18 %/an</strong> (source : Statista, IDC, mars 2026). Trois forces structurent désormais le secteur :</p>
-    <ul style={pdfStyles.ul}>
-      <li>La pression réglementaire (MDR en Europe, FDA aux US)</li>
-      <li>L'intégration verticale par les géants tech (Apple, Samsung, Google/Fitbit)</li>
-      <li>L'émergence de spécialistes verticaux sur des indications précises (sommeil, stress, glycémie continue)</li>
-    </ul>
-    <p style={pdfStyles.p}>Lumio Health se positionne historiquement sur le créneau du stress chronique mesuré en milieu professionnel, avec une approche B2B-DRH. Le présent rapport recense les acteurs concurrents directs et indirects, et propose une cartographie de la pression concurrentielle.</p>
+    <p style={pdfStyles.p}>Le marché mondial des wearables santé dépasse <strong>95 Md$</strong> en 2025 et croît à <strong>+18 %/an</strong>. Trois forces structurent le secteur : la pression réglementaire MDR, l'intégration par les géants tech, et l'émergence de spécialistes verticaux sur des indications précises (stress, sommeil, glycémie).</p>
+    <p style={pdfStyles.p}>Lumio Health se positionne sur le stress chronique en milieu professionnel, approche B2B-DRH. Ce rapport recense les acteurs concurrents au <strong>1er mars 2026</strong>.</p>
     <div style={pdfStyles.pageNum}>— 1 —</div>
-  </div>
+  </>
 );
 
-const PdfPage2 = ({ r }) => (
-  <div style={pdfStyles.page}>
+const VeillePage2 = ({ r }) => (
+  <>
     <h2 style={pdfStyles.h2}>I. Cartographie concurrentielle</h2>
     <table style={pdfStyles.table}>
       <thead>
-        <tr>
-          <th>Acteur</th><th>Produit</th><th>Certif. MDR</th><th>Prix B2B</th><th>Funding</th>
-        </tr>
+        <tr><th>Acteur</th><th>Produit</th><th>Certif. MDR</th><th>Prix B2B</th><th>Funding</th></tr>
       </thead>
       <tbody>
         {r.competitors.map((c, i) => (
@@ -203,54 +257,54 @@ const PdfPage2 = ({ r }) => (
     </table>
     <div style={pdfStyles.handAnnotation}>
       <span style={{ background: '#fff8b0', padding: '2px 6px', display: 'inline-block', transform: 'rotate(-1deg)', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 13, color: '#a02020', border: '1px dashed #c4420f' }}>
-        ↑ Yanis : « 230 ou 180 ? À clarifier avec Camille »
+        ↑ Yassine : « 230 ou 180 clients actifs ? À clarifier avec Camille »
       </span>
     </div>
-    <h2 style={pdfStyles.h2}>II. Analyse des signaux faibles</h2>
-    <h3 style={pdfStyles.h3}>a) Salon Préventica 2026 (Lyon, 20-22 mars)</h3>
-    <p style={pdfStyles.p}>Les DRH et préventeurs interrogés citent la certification MDR comme critère de décision n°1 dans <strong>73 % des cas</strong> (n=42 entretiens informels sur stand). Citation récurrente : « Sans certif, je peux pas justifier l'achat à mon comité d'éthique. »</p>
-    <h3 style={pdfStyles.h3}>b) Étude Kantar Health Monitor 2026</h3>
-    <p style={pdfStyles.p}>La certification réglementaire devient un <em>signal de crédibilité</em> — pas seulement une obligation légale. <strong>58 % des DRH</strong> déclarent l'utiliser comme proxy de qualité scientifique, même quand ils ne comprennent pas le détail du règlement.</p>
+    <h2 style={pdfStyles.h2}>II. Signaux MDR (mars 2026)</h2>
+    <p style={pdfStyles.p}><strong>73 %</strong> des DRH interrogés à Préventica citent la certification MDR comme critère d'achat n°1. Citation récurrente : « Sans certif, je peux pas justifier l'achat à mon comité d'éthique. »</p>
+    <p style={pdfStyles.p}>La certification devient un <em>signal de crédibilité</em> — pas seulement une obligation légale. <strong>58 % des DRH</strong> l'utilisent comme proxy de qualité scientifique.</p>
     <div style={pdfStyles.pageNum}>— 2 —</div>
-  </div>
+  </>
 );
 
-const PdfPage3 = ({ r }) => (
-  <div style={pdfStyles.page}>
-    <h3 style={pdfStyles.h3}>c) Mouvement des prix</h3>
-    <p style={pdfStyles.p}>Les acteurs certifiés ont tous augmenté leurs tarifs B2B de <strong>15 à 25 %</strong> dans les six mois suivant l'obtention. Les non-certifiés sont sous pression à la baisse.</p>
-
-    <h2 style={pdfStyles.h2}>III. Lacunes non couvertes</h2>
+const VeillePage3 = ({ r }) => (
+  <>
+    <h2 style={pdfStyles.h2}>III. Tendances identifiées (mars 2026)</h2>
     <ul style={pdfStyles.ul}>
-      <li>Statut exact de la certification chez <strong>Withings</strong> — information contradictoire entre site institutionnel et discours commercial</li>
-      <li>Calendrier MDR de Lumio — <em>Théo a refusé de me communiquer l'information malgré relances</em></li>
-      <li>Résultats de l'étude qualitative clients B2B menée par <strong>Camille Ott</strong> en mars 2026 — jamais reçus</li>
-      <li>Position d'Apple Health sur le marché entreprise français — rumeurs de partenariat avec Malakoff Humanis non confirmées</li>
+      <li>La certification MDR devient critère d'achat n°1 en B2B institutionnel</li>
+      <li>Le marché B2C "médical-grade" est encore peu occupé</li>
+      <li>Les mutuelles cherchent des partenaires wearables pour offres prévention</li>
+      <li>L'IA générative commence à entrer dans les algorithmes de stress (signal faible)</li>
     </ul>
-
+    <h2 style={pdfStyles.h2}>IV. Lacunes non couvertes</h2>
+    <ul style={pdfStyles.ul}>
+      <li>Statut exact MDR Lumio — <em>Théo n'a pas répondu à mes sollicitations</em></li>
+      <li>Suite levée Biostream et plan B2C — info mars 2026 seulement</li>
+      <li>Confirmation partenariat Apple / Malakoff Humanis — non confirmée</li>
+      <li>Prix Neuroflow post-lancement Fnac — non communiqué</li>
+    </ul>
     <div style={{ ...pdfStyles.warningBox, background: '#e8f0e0', borderColor: '#0a7a6e', color: '#1a3a30' }}>
-      💡 <strong>Note Yanis</strong> : J'ai relancé Camille trois fois pour obtenir l'étude qualitative B2B. Réponse type : « j'envoie ce soir ». Jamais reçu. À creuser ?
+      💡 <strong>Note Yassine :</strong> J'ai relancé Camille trois fois pour l'étude qualitative B2B. Réponse type : « j'envoie ce soir ». Jamais reçu. À creuser.
     </div>
     <div style={pdfStyles.pageNum}>— 3 —</div>
-  </div>
+  </>
 );
 
-const PdfPage4 = ({ r }) => (
-  <div style={pdfStyles.page}>
-    <h2 style={pdfStyles.h2}>IV. Recommandations</h2>
-    <p style={pdfStyles.p}>À ce stade, et sous toutes réserves liées à mon niveau d'expérience, j'identifie trois mouvements urgents :</p>
-    <ol style={pdfStyles.ul}>
-      <li><strong>Clarifier en interne le calendrier MDR de Lumio.</strong> Sans cette information, toute communication externe est risquée.</li>
-      <li><strong>Cartographier précisément les 230 clients</strong> (ou 180 ?) pour distinguer comptes actifs et dormants. Le chiffre communiqué au board doit refléter la réalité commerciale, pas l'historique.</li>
-      <li><strong>Anticiper l'arrivée d'Apple Health</strong> sur le segment entreprise via un positionnement de niche défendable. La concurrence frontale n'est pas tenable.</li>
-    </ol>
-
-    <div style={{ marginTop: 60, paddingTop: 20, borderTop: '1px solid #ccc', fontFamily: 'var(--font-display)', fontStyle: 'italic', color: '#6a6f7a', fontSize: 12 }}>
-      <p>Je tiens à remercier l'ensemble de l'équipe marketing pour leur accueil pendant ces six mois. Cette mission a été passionnante mais je termine avec le sentiment de n'avoir vu qu'une partie du sujet — beaucoup de questions sont restées sans réponse, faute d'accès à l'information.</p>
-      <p style={{ marginTop: 14 }}>Yanis Morel<br/>Stagiaire Marketing — Lumio Health<br/>Master 2 Sciences Po Strategic Communication<br/>12 mai 2026</p>
+const VeillePage4 = ({ r }) => (
+  <>
+    <h2 style={pdfStyles.h2}>V. Ce que ce document ne sait pas</h2>
+    <p style={pdfStyles.p}>Depuis la rédaction de ce document (mars 2026), plusieurs éléments ont évolué de façon significative :</p>
+    <ul style={pdfStyles.ul}>
+      <li><strong>Neuroflow</strong> a obtenu sa certification MDR IIa en mars 2026 — non intégré ici</li>
+      <li>Un appel d'offres mutuelles (45 M€, MDR obligatoire) a été lancé — signal fort B2B non anticipé</li>
+      <li>TÜV Rheinland a émis un 3e avis de non-conformité sur le dossier clinique Lumio (septembre 2026)</li>
+    </ul>
+    <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid #ccc', fontFamily: 'var(--font-display)', fontStyle: 'italic', color: '#6a6f7a', fontSize: 12 }}>
+      <p>Je termine avec le sentiment de n'avoir vu qu'une partie du sujet — beaucoup de questions sont restées sans réponse, faute d'accès à l'information.</p>
+      <p style={{ marginTop: 14 }}>Yassine Morel<br/>Stagiaire Marketing — Lumio Health · 12 mai 2026</p>
     </div>
     <div style={pdfStyles.pageNum}>— 4 —</div>
-  </div>
+  </>
 );
 
 const pdfStyles = {

@@ -6,41 +6,41 @@ const { useState: useStateMail, useEffect: useEffectMail, useRef: useRefMail } =
 function MailApp({ winId, openId }) {
   const D = window.LUMIO_DATA;
 
-  // Build mailbox
+  // Build mailbox BC2
   const inbox = [
     {
       id: 'brief',
-      from: 'Sonia Ferracci',
-      fromEmail: 'sonia@lumio-health.com',
-      avatar: 'SF',
-      avatarColor: '#c4420f',
-      subject: 'Mission de diagnostic de marque — confidentiel',
-      date: '03/09/26 · 07:42',
-      preview: 'Lou, Je vous confie une mission dont j\'ai besoin qu\'elle soit terminée avant…',
-      unread: false,
-      flagged: true,
-      body: D.briefEmail.body,
-      tags: ['IMPORTANT', 'MISSION']
-    },
-    {
-      id: 'theo',
       from: 'Théo Marczak',
       fromEmail: 'theo@lumio-health.com',
       avatar: 'TM',
       avatarColor: '#5c2d8f',
-      subject: 'Re : Proposition repositionnement — mes réserves',
-      date: '14/06/26 · 23:12',
-      preview: 'Sonia, J\'ai lu la note. Il y a des choses avec lesquelles je suis d\'accord…',
+      subject: 'Mission urgente — Board Northgate vendredi',
+      date: '12/10/26 · 07:19',
+      preview: 'Lou, Je vais être direct parce qu\'on n\'a pas le temps. Le board Northgate…',
+      unread: false,
+      flagged: true,
+      body: D.briefEmail.body,
+      tags: ['URGENT', 'MISSION']
+    },
+    {
+      id: 'jakob',
+      from: 'Jakob Rein',
+      fromEmail: 'j.rein@northgate-capital.com',
+      avatar: 'JR',
+      avatarColor: '#1b3a6b',
+      subject: 'Board Friday — what I expect',
+      date: '09/10/26 · 16:44',
+      preview: 'Short version : I need one scenario. Not three. One…',
       unread: false,
       forwarded: true,
-      body: D.ceoEmail.body,
-      tags: ['TRANSFÉRÉ par X.', 'CONFIDENTIEL'],
+      body: D.jakobEmail.body,
+      tags: ['TRANSMIS par Sonia', 'CONFIDENTIEL'],
       header: {
-        from: D.ceoEmail.from,
-        to: D.ceoEmail.to,
-        cc: D.ceoEmail.cc,
-        subject: D.ceoEmail.subject,
-        date: D.ceoEmail.date
+        from: D.jakobEmail.from,
+        to: D.jakobEmail.to,
+        subject: D.jakobEmail.subject,
+        date: D.jakobEmail.date,
+        tag: D.jakobEmail.tag
       }
     },
     // Emails distracteurs
@@ -48,7 +48,7 @@ function MailApp({ winId, openId }) {
       id: 'd1', from: 'LinkedIn', fromEmail: 'no-reply@linkedin.com',
       avatar: 'in', avatarColor: '#0a66c2',
       subject: 'Vous avez 4 nouvelles offres correspondant à votre profil',
-      date: '02/09/26 · 18:30',
+      date: '02/10/26 · 18:30',
       preview: 'Senior Brand Strategist · Healthtech — Paris · BNP Paribas Cardif…',
       unread: true, distractor: true,
       body: 'Vous avez 4 nouvelles offres correspondant à votre profil.\n\n→ Senior Brand Strategist · Healthtech — Paris · BNP Paribas Cardif\n→ Directeur de Marque — Doctolib\n→ Head of Brand — Withings\n→ Consultant Senior — Frog Design\n\nVoir toutes les offres →'
@@ -57,7 +57,7 @@ function MailApp({ winId, openId }) {
       id: 'd2', from: 'Le Slip Français', fromEmail: 'newsletter@leslipfrancais.fr',
       avatar: '🩳', avatarColor: '#1a4d7a',
       subject: '–30% sur la collection Automne 🍂',
-      date: '02/09/26 · 09:15',
+      date: '02/10/26 · 09:15',
       preview: 'Le retour du froid, c\'est aussi le retour de nos bestsellers…',
       unread: true, distractor: true,
       body: '—30% sur la collection Automne. Code : AUTOMNE26.'
@@ -66,7 +66,7 @@ function MailApp({ winId, openId }) {
       id: 'd3', from: 'URSSAF', fromEmail: 'no-reply@urssaf.fr',
       avatar: 'U', avatarColor: '#003671',
       subject: 'Échéance trimestrielle — déclaration à venir',
-      date: '01/09/26 · 06:00',
+      date: '01/10/26 · 06:00',
       preview: 'Madame, Monsieur, Votre déclaration trimestrielle doit être effectuée avant le 30/09/2026…',
       unread: false, distractor: true,
       body: 'Madame, Monsieur,\n\nVotre déclaration trimestrielle doit être effectuée avant le 30 septembre 2026.\n\nCordialement, vos services URSSAF.'
@@ -169,9 +169,10 @@ function MailApp({ winId, openId }) {
               <div style={mailStyles.forwardLabel}>— Message d'origine transféré —</div>
               <div style={mailStyles.forwardMeta}>
                 <div><strong>De :</strong> {selected.header.from}</div>
-                <div><strong>À :</strong> {selected.header.to}</div>
-                <div><strong>Cc :</strong> {selected.header.cc}</div>
+                {selected.header.to && <div><strong>À :</strong> {selected.header.to}</div>}
+                {selected.header.cc && <div><strong>Cc :</strong> {selected.header.cc}</div>}
                 <div><strong>Date :</strong> {selected.header.date}</div>
+                {selected.header.tag && <div style={{ marginTop: 6, fontWeight: 700, color: 'var(--accent)', fontSize: 11 }}>{selected.header.tag}</div>}
               </div>
             </div>
           )}

@@ -18,7 +18,7 @@ const APP_META = {
   finder:   { title: 'Finder',       w:  820, h: 540, icon: 'FinderIcon' },
   calendar: { title: 'Calendrier',   w:  780, h: 580, icon: 'CalendarIcon' },
   trash:    { title: 'Corbeille',    w:  500, h: 360, icon: 'TrashIcon' },
-  livrable:  { title: 'Livrable — BC1',        w: 920, h: 620, icon: 'LivrableIcon' },
+  livrable:  { title: 'Livrable — BC2',        w: 920, h: 620, icon: 'LivrableIcon' },
   jefferson: { title: 'Jefferson · Guide PAC', w: 480, h: 560, icon: 'JeffersonIcon' }
 };
 
@@ -125,31 +125,29 @@ const trafficLight = (color) => ({
 });
 
 // ═════ Menu bar ═════════════════════════════════════════════
-// Temps fictif : 3h30 réelles = 18 jours fictifs (12→30 sept.)
-// Ratio : 1 min réelle = 5.14 min fictives. Départ : sam. 12 sept. 08:14
-// NOTE : pas de const FICTIF_START_REAL au niveau module — on lit window.LUMIO_TIMER_START à chaque appel
-const FICTIF_START_MIN = 12 * 60 + 14; // 08h14 en minutes depuis minuit le 12 sept.
+// Temps fictif BC2 : 3h30 réelles = 18 jours fictifs (12→30 oct.)
+// Ratio : 1 min réelle = 5.14 min fictives. Départ : lun. 12 oct. 07h19
+const FICTIF_START_MIN = 7 * 60 + 19; // 07h19 en minutes depuis minuit le 12 oct.
 const RATIO = 18 * 24 * 60 / (3 * 60 + 30); // ~74x (18 jours / 3h30)
-const SEPT_DAYS = ['dim.','lun.','mar.','mer.','jeu.','ven.','sam.'];
-// 12 sept. 2026 = samedi → offset 6
+const OCT_DAYS = ['dim.','lun.','mar.','mer.','jeu.','ven.','sam.'];
+// 12 oct. 2026 = lundi → offset 1
 function getFictifTime() {
-  // Lire window.LUMIO_TIMER_START à chaque appel — jamais stocker en closure de module
   const startReal = window.LUMIO_TIMER_START || Date.now();
-  const realElapsed = (Date.now() - startReal) / 60000; // minutes réelles écoulées
-  const fictifElapsed = realElapsed * RATIO; // minutes fictives
+  const realElapsed = (Date.now() - startReal) / 60000;
+  const fictifElapsed = realElapsed * RATIO;
   const totalMin = FICTIF_START_MIN + fictifElapsed;
-  // Calculer le jour (12 + jours écoulés)
   const dayOffset = Math.floor(totalMin / (24 * 60));
-  const day = Math.min(12 + dayOffset, 30); // cap au 30 sept.
+  const day = Math.min(12 + dayOffset, 30); // cap au 30 oct.
   const minuteOfDay = totalMin % (24 * 60);
   const hh = Math.floor(minuteOfDay / 60).toString().padStart(2,'0');
   const mm = Math.floor(minuteOfDay % 60).toString().padStart(2,'0');
-  // Jour de la semaine (12 sept. = samedi → offset 6)
-  const dowOffset = (6 + dayOffset) % 7;
-  const dow = SEPT_DAYS[dowOffset];
-  return { label: `${dow} ${day} sept.  ${hh}:${mm}`, day, dayOffset };
+  const dowOffset = (1 + dayOffset) % 7; // lundi 12 oct = offset 1
+  const dow = OCT_DAYS[dowOffset];
+  return { label: `${dow} ${day} oct.  ${hh}:${mm}`, day, dayOffset };
 }
 
+// Dates fictives : board vendredi 16 oct. 2026
+// Surveillance fin de session → J=30 (30 oct.) = deadline dépassée
 // Exposer pour le Calendrier
 window.__getFictifTime = getFictifTime;
 
@@ -552,24 +550,24 @@ function Desktop({ onLogout }) {
               from: 'Camille Ott',
               fromEmail: 'camille.ott@lumio-health.com',
               avatar: 'CO', avatarColor: '#0a7a6e',
-              subject: 'Ce que je ne dis pas sur Slack',
-              date: '12/09/26 · 09:14',
-              preview: 'J\'ai une ancienne collègue chez Biostream. Ce qu\'elle m\'a dit sur leur certif…',
+              subject: 'Ce que je ne mets pas sur Slack',
+              date: '12/10/26 · 09:14',
+              preview: 'Le vrai churn c\'est 9 %, pas 4. Et j\'ai des comptes en attente de la MDR…',
               unread: true,
               tags: ['TERRAIN'],
               body: `${(window.LUMIO_DATA?.student?.name || '').split(' ')[0] || 'Bonjour'},
 
-Je préfère t'écrire par mail. Je ne suis pas à l'aise pour dire ça sur Slack — Théo lit les canaux.
+Je préfère t'écrire par mail. Théo lit les canaux Slack.
 
-J'ai une ancienne collègue chez Biostream. On s'est parlé il y a trois semaines. Elle m'a dit que leur certification MDR classe IIa a pris 22 mois et leur a coûté aux alentours de 400K€. Et ça, c'était avec un dossier déjà bien préparé et un organisme notifié très réactif.
+Deux choses que tu dois savoir pour ton document.
 
-Ce que j'en déduis — et je ne peux pas le dire à Sonia sans citer ma source — c'est que si Lumio n'a pas commencé le process il y a plus d'un an, on n'est pas certifiés avant fin 2027 dans le meilleur des cas. Peut-être 2028.
+Première chose : le churn qu'on présente au board est de 4,1 %. C'est le churn sur les contrats signés depuis janvier 2025, c'est-à-dire les meilleurs clients. Si tu calcules sur la base totale des 180 clients actifs, tu es plus près de 9 %. C'est le chiffre que j'utilise dans mes prévisions terrain. Sonia ne veut pas l'entendre.
 
-Ça change tout à la promesse "expert santé certifié". On ne peut pas construire une plateforme de marque sur quelque chose qu'on n'aura pas pendant 18 à 30 mois.
+Deuxième chose : j'ai au moins 8 à 10 comptes B2B en stand-by sur la MDR pour monter en gamme. Un seul m'a dit mot pour mot : "Le jour où Lumio a sa MDR, on double le périmètre." Ça représente 600K€ de CA additionnel sur 12 mois sans aller chercher un seul nouveau client. Est-ce que quelqu'un a mis ça dans une projection ? Non.
 
-Ce que Sonia refuse de voir : nos clients B2B actuels, ceux qui nous font confiance depuis des années — certains ont déjà commencé à regarder Biostream. J'ai eu deux rendez-vous ce mois-ci où j'ai senti le glissement. On a encore 6 mois, peut-être 9, avant que ça devienne une hémorragie.
+Le board va entendre deux positions : Sonia qui veut aller vite, Théo qui veut attendre. La vraie question, celle que personne ne pose, c'est : qu'est-ce qu'on perd en B2B si on annonce le pivot maintenant, avant la MDR ?
 
-À toi de décider comment tu utilises ça dans ta livraison.
+À toi de décider comment tu l'intègres.
 
 Camille`
             };
@@ -602,16 +600,14 @@ Camille`
       setNotifications(ns => [...ns, {
         id,
         app: 'Slack',
-        icon: 'SF',
-        color: '#c4420f',
-        title: 'Sonia Ferracci',
-        body: 'Je viens de recevoir ton document. Je te lis.',
+        icon: 'JR',
+        color: '#1b3a6b',
+        title: 'Jakob Rein',
+        body: 'I received your document. Reading now.',
         click: { app: 'slack', props: {} }
       }]);
       setTimeout(() => setNotifications(ns => ns.filter(n => n.id !== id)), 14000);
-      // Stocker le livrable pour que Slack puisse y répondre
       window.LUMIO_DATA._livrableSubmitted = { veille, plateforme, juryResult };
-      // Déclencher une réponse Sonia dans Slack après 4s
       setTimeout(() => {
         if (window.__onSoniaLivrableReaction) window.__onSoniaLivrableReaction(veille, plateforme);
       }, 4000);
@@ -631,8 +627,8 @@ Camille`
           app: 'Calendrier',
           icon: '📅',
           color: '#c4420f',
-          title: 'CODIR dans 5 minutes',
-          body: 'Le board attend ton document. Il est 08h55 le 30 septembre.',
+          title: 'Board Northgate dans 5 minutes',
+          body: 'Jakob arrive. Dernière chance d\'envoyer la recommandation. Il est 08h55 le 30 octobre.',
           click: { app: 'livrable', props: {} }
         }]);
       }
@@ -716,21 +712,21 @@ Camille`
       if (dLeft <= 12 && dLeft > 7) {
         pushTip('j12', {
           title: 'J−12 · Par où commencer',
-          body: 'Sonia t\'a écrit hier soir. Commence par Mail — sa lettre de mission est là.',
+          body: 'Théo t\'a écrit ce matin à 07h19. Commence par Mail — sa lettre de mission est là.',
           click: { app: 'mail', props: { openId: 'brief' } }
         });
       }
       if (dLeft <= 7 && dLeft > 3) {
         pushTip('j7', {
           title: 'J−7 · Passer à l\'action',
-          body: 'Sonia attend une première réaction. Ouvre Slack et envoie-lui quelque chose — même une ébauche.',
+          body: 'Jakob attend une position, pas un diagnostic. Ouvre Slack et envoie-lui ta première hypothèse — même imparfaite.',
           click: { app: 'slack', props: {} }
         });
       }
       if (dLeft <= 3 && dLeft > 0) {
         pushTip('j3', {
           title: 'J−3 · Finaliser',
-          body: 'L\'app Livrable t\'attend dans le dock. Tu as assez d\'éléments pour construire quelque chose.',
+          body: 'L\'app Livrable t\'attend dans le dock. C.7 à C.12 — tu as assez d\'éléments pour la recommandation board.',
           click: { app: 'livrable', props: {} }
         });
       }
@@ -748,22 +744,22 @@ Camille`
     const checks = [
       // 3 min sans rien ouvrir → Mail
       { delay: 3 * 60 * 1000, key: 'ctx_start', cond: () => openedApps.size === 0,
-        tip: { title: 'Par où commencer ?', body: 'Cherche la lettre de mission de Sonia Ferracci dans Mail — c\'est là que tout commence.', click: { app: 'mail', props: { openId: 'brief' } } } },
+        tip: { title: 'Par où commencer ?', body: 'Théo t\'a écrit ce matin à 07h19. Sa lettre de mission est dans Mail — commence par là.', click: { app: 'mail', props: { openId: 'brief' } } } },
       // 6 min — Mail ouvert mais pas Slack
       { delay: 6 * 60 * 1000, key: 'ctx_slack', cond: () => openedApps.has('mail') && !openedApps.has('slack'),
-        tip: { title: 'Sonia attend', body: 'Tu as lu le brief. Sonia Ferracci attend ta réaction sur Slack — ouvre-le et écris-lui.', click: { app: 'slack', props: {} } } },
+        tip: { title: 'Jakob attend', body: 'Tu as lu le brief. Jakob Rein attend ta première hypothèse sur Slack — ouvre-le et envoie-lui quelque chose.', click: { app: 'slack', props: {} } } },
       // 8 min — Slack ouvert mais rien envoyé
       { delay: 8 * 60 * 1000, key: 'ctx_send', cond: () => openedApps.has('slack') && !slackMessageSent.v,
-        tip: { title: 'Envoie quelque chose', body: 'Tu as Slack ouvert. Envoie une phrase à Sonia — même imparfaite. Ça débloque la suite.', click: { app: 'slack', props: {} } } },
-      // 10 min — pas ouvert Aperçu
+        tip: { title: 'Envoie quelque chose', body: 'Slack est ouvert. Envoie une phrase à Jakob — même incomplète. Ça débloque la suite.', click: { app: 'slack', props: {} } } },
+      // 10 min — pas ouvert PDF
       { delay: 10 * 60 * 1000, key: 'ctx_pdf', cond: () => !openedApps.has('pdf'),
-        tip: { title: 'Un rapport attend dans Aperçu', body: 'Yanis, le stagiaire marketing, a produit une veille concurrentielle en mai. Elle est incomplète — mais elle dit des choses importantes sur Biostream.', click: { app: 'pdf', props: {} } } },
+        tip: { title: 'Le deck board Q3 est dans Aperçu', body: 'Sonia a préparé un deck board pour octobre. Il contient des chiffres clés — et des projections que tu dois analyser.', click: { app: 'pdf', props: {} } } },
       // 15 min — pas ouvert Mémos vocaux
       { delay: 15 * 60 * 1000, key: 'ctx_voice', cond: () => !openedApps.has('voice'),
-        tip: { title: 'Camille a enregistré trois verbatims', body: 'Ouvre Mémos vocaux — Camille Ott dit des choses sur les clients B2B que les documents ne disent pas.', click: { app: 'voice', props: {} } } },
+        tip: { title: 'Camille a enregistré trois verbatims', body: 'Ouvre Mémos vocaux — Camille Ott dit des choses sur les clients B2B que les documents ne montrent pas.', click: { app: 'voice', props: {} } } },
       // 20 min — livrable débloqué mais pas ouvert
       { delay: 20 * 60 * 1000, key: 'ctx_livrable', cond: () => livrableUnlocked && !openedApps.has('livrable'),
-        tip: { title: 'Le livrable t\'attend', body: 'L\'app Livrable rebondit dans le dock. Tu as assez d\'éléments pour commencer à rédiger.', click: { app: 'livrable', props: {} } } },
+        tip: { title: 'Le livrable t\'attend', body: 'L\'app Livrable rebondit dans le dock. C.7 à C.12 — commence à construire la recommandation.', click: { app: 'livrable', props: {} } } },
     ];
 
     const timers = checks.map(c =>
@@ -775,10 +771,10 @@ Camille`
   // Notification scheduler ambiant (existant, allégé)
   useWmEffect(() => {
     const events = [
-      { t: 12000, n: { app: 'Slack', icon: 'CO', color: '#0a7a6e', title: 'Camille Ott', body: 'Si tu veux qu\'on se parle dans la semaine, dis-moi 🙃', click: { app: 'slack', props: { openChannel: 'camille' } } } },
-      { t: 60000, n: { app: 'Calendrier', icon: '📅', color: '#c4420f', title: 'CODIR de cadrage', body: 'Le 30 sept à 09:00 — dans 18 jours. V1 attendue.', click: { app: 'calendar' } } },
-      { t: 130000, n: { app: 'Slack', icon: 'CO', color: '#0a7a6e', title: 'Camille Ott', body: 'PS — j\'ai des verbatims clients qui peuvent t\'aider. Audio dispo dans Mémos vocaux.', click: { app: 'voice' } } },
-      { t: 20 * 60 * 1000, n: { app: 'Safari', icon: 'LS', color: '#1a1a2e', title: 'Les Stratégies', body: 'Lumio Health : le wearable français coincé entre certification et grand public — un article vient d\'être indexé.', click: { app: 'browser', props: { openTab: 'fausse-une' } } } }
+      { t: 12000, n: { app: 'Slack', icon: 'CO', color: '#0a7a6e', title: 'Camille Ott', body: 'Si tu veux les vrais chiffres terrain avant de commencer — pas ceux du deck — dis-moi 🙃', click: { app: 'slack', props: { openChannel: 'camille' } } } },
+      { t: 60000, n: { app: 'Calendrier', icon: '📅', color: '#1b3a6b', title: 'Board Northgate Capital', body: 'Vendredi 16 oct. à 09:00 — dans 4 jours. Recommandation attendue jeudi soir.', click: { app: 'calendar' } } },
+      { t: 130000, n: { app: 'Slack', icon: 'CO', color: '#0a7a6e', title: 'Camille Ott', body: 'PS — j\'ai des verbatims clients qui peuvent nourrir ta reco. Audio dispo dans Mémos vocaux.', click: { app: 'voice' } } },
+      { t: 20 * 60 * 1000, n: { app: 'Les Échos', icon: 'LE', color: '#1a1a2e', title: 'Breaking · Wearables & Mutuelles', body: 'Signal fort B2B : appel d\'offres mutuelles 45 M€ avec MDR obligatoire.', click: { app: 'browser', props: { openTab: 'fausse-une' } } } }
     ];
     const timers = events.map(ev => setTimeout(() => {
       const id = ++notifSeqRef.current;
