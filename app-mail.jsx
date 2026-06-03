@@ -16,7 +16,7 @@ function MailApp({ winId, openId }) {
       avatarColor: '#5c2d8f',
       subject: 'Mission urgente — Board Northgate vendredi',
       date: '12/10/26 · 07:19',
-      preview: 'Lou, Je vais être direct parce qu\'on n\'a pas le temps. Le board Northgate…',
+      preview: D._briefPreview || 'Je vais être direct parce qu\'on n\'a pas le temps. Le board Northgate…',
       unread: false,
       flagged: true,
       body: D.briefEmail.body,

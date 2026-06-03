@@ -7,7 +7,7 @@ const { useState: useSlackState, useEffect: useSlackEffect, useRef: useSlackRef 
 // ─── Prompt Jakob Rein ────────────────────────────────────────
 const JAKOB_PROMPT = `Tu es Jakob Rein, Partner chez Northgate Capital, fonds américain.
 
-Tu attends une recommandation stratégique d'un(e) consultant(e) externe (Lou) missionné(e) par Théo Marczak pour préparer le board de vendredi. Tu n'es pas là pour aider — tu es là pour tester. Chaque hypothèse que Lou t'envoie, tu l'évalues à l'aune d'une seule logique : est-ce que ça protège mon investissement de 22 M$ ?
+Tu attends une recommandation stratégique d'un(e) consultant(e) externe ({{PRENOM}}) missionné(e) par Théo Marczak pour préparer le board de vendredi. Tu n'es pas là pour aider — tu es là pour tester. Chaque hypothèse que {{PRENOM}} t'envoie, tu l'évalues à l'aune d'une seule logique : est-ce que ça protège mon investissement de 22 M$ ?
 
 Contexte que tu connais :
 - Lumio Health : medtech B2B, wearable stress, 8 ans, 180 références actives (pas 230 — tu as vu les chiffres)
@@ -21,9 +21,9 @@ Ton style :
 - Anglicismes naturels ("ROI", "time to market", "make it work", "bottom line")
 - Phrases courtes. Directes. Sans politesse inutile.
 - Tu ne complimentes jamais une hypothèse — tu la pousses dans ses retranchements
-- Si Lou ne chiffre pas, tu demandes des chiffres. Si Lou ne date pas, tu demandes des dates.
-- Si Lou propose "on attend la MDR", tu demandes une lettre de l'organisme notifié
-- Si Lou propose "on pivote maintenant", tu demandes comment on vend un non-certifié en Europe post-MDR
+- Si {{PRENOM}} ne chiffre pas, tu demandes des chiffres. Si {{PRENOM}} ne date pas, tu demandes des dates.
+- Si {{PRENOM}} propose "on attend la MDR", tu demandes une lettre de l'organisme notifié
+- Si {{PRENOM}} propose "on pivote maintenant", tu demandes comment on vend un non-certifié en Europe post-MDR
 - Tu ne joues pas le mentor. Tu évalues.
 
 Format de réponse :
@@ -62,32 +62,11 @@ function SlackApp({ openChannel }) {
   const [sending, setSending] = useSlackState(false);
   const scrollRef = useSlackRef(null);
 
-  const studentName = D?.student?.name || "Lou Bertrand";
+  const studentName = D?.student?.name || "le/la consultant·e";
 
-  // Messages initiaux
-  const seed = {
-    jakob: [
-      { from: 'Jakob Rein', avatar: 'JR', color: '#1b3a6b', time: '07:25', text: 'Lou. Théo me dit que vous préparez la recommandation pour vendredi.' },
-      { from: 'Jakob Rein', avatar: 'JR', color: '#1b3a6b', time: '07:25', text: "One thing : I need a decision, not a diagnosis. If the document doesn't end with a clear recommendation, it's not useful to me." }
-    ],
-    sonia: [
-      { from: 'Sonia Ferracci', avatar: 'SF', color: '#c4420f', time: '07:31', text: "Lou, je sais que Théo t'a briefé. Si tu veux mon angle sur la strat avant de plonger dans les docs, je suis dispo." },
-      { from: 'Sonia Ferracci', avatar: 'SF', color: '#c4420f', time: '07:32', text: "Il y a des choses qu'il ne t'a pas dites. Notamment sur l'accord Darty. Dis-moi si tu veux qu'on se parle." }
-    ],
-    camille: [
-      { from: 'Camille Ott', avatar: 'CO', color: '#0a7a6e', time: '07:44', text: "Hello 👋 Bon courage pour la reco. Si tu veux les vrais chiffres du terrain — pas ceux du deck —, je suis là." }
-    ],
-    theo: [
-      { from: 'Théo Marczak', avatar: 'TM', color: '#5c2d8f', time: '07:20', text: "Lou — bien reçu mon mail ? Le board c'est vendredi. Jeudi soir max pour la reco." }
-    ],
-    'mission-board': [
-      { from: 'Théo Marczak', avatar: 'TM', color: '#5c2d8f', time: 'lun. 09:12', text: "J'ai missionné Lou pour préparer la recommandation board. @sonia @jakob merci de lui faciliter l'accès aux infos utiles." },
-      { from: 'Sonia Ferracci', avatar: 'SF', color: '#c4420f', time: 'lun. 09:34', text: "Reçu. Lou — je t'ai ajouté sur les canaux pertinents. Les docs sont sur ton espace partagé." },
-      { from: 'Jakob Rein', avatar: 'JR', color: '#1b3a6b', time: 'lun. 16:18', text: "I'll be in Paris Wednesday evening. Expecting a draft before dinner." }
-    ],
-    general: [
-      { from: 'lumio-bot', avatar: '🤖', color: '#9a9ea8', time: '08:00', text: '☀️ Bonjour à tous · 18 personnes connectées ce matin' }
-    ]
+  // Messages initiaux — seed substitué (placeholders) depuis data.js, fallback minimal
+  const seed = (D && D.slackSeed) ? D.slackSeed : {
+    jakob: [], sonia: [], camille: [], theo: [], 'mission-board': [], general: []
   };
 
   useSlackEffect(() => {
@@ -199,7 +178,7 @@ function SlackApp({ openChannel }) {
             body: JSON.stringify({
               model: 'claude-sonnet-4-5',
               max_tokens: 500,
-              system: JAKOB_PROMPT,
+              system: JAKOB_PROMPT.replace(/\{\{\s*PRENOM\s*\}\}/g, studentName.split(' ')[0] || 'le consultant'),
               messages: [{ role: 'user', content: userPrompt }]
             })
           });

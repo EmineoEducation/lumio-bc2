@@ -7,10 +7,11 @@ window.LUMIO_DATA = {
 
   // ─── Identité de l'étudiant·e (placeholder, remplacé à la connexion) ────
   student: {
-    name: "Lou Bertrand",
+    name: "",
     role: "Consultant·e externe — Stratégie marcom",
-    email: "lou.bertrand@consult.fr",
-    company: "Indépendant·e"
+    email: "",
+    company: "Indépendant·e",
+    initial: "?"
   },
 
   // ─── Contexte Lumio (fiche autonome — dossier Finder dès le démarrage) ──
@@ -84,10 +85,10 @@ Personne n'a encore produit ce document.`
   // ─── Email de mission — Théo → étudiant·e ───────────────────────────────
   briefEmail: {
     from: "Théo Marczak <theo@lumio-health.com>",
-    to: "lou.bertrand@consult.fr",
+    to: "{{EMAIL_ETUDIANT}}",
     subject: "Mission urgente — Board Northgate vendredi",
     date: "Lundi 12 octobre 2026, 07h19",
-    body: `Lou,
+    body: `{{PRENOM}},
 
 Je vais être direct parce qu'on n'a pas le temps.
 
@@ -415,14 +416,40 @@ Sur la concurrence : « Biostream fait peur. Samsung fait de la techno. Nous, si
   // ─── Messages Slack initiaux ─────────────────────────────────────────────
   slackMessages: {
     initial: [
-      { from: "Théo Marczak", time: "07:20", text: "Lou — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.", read: true },
+      { from: "Théo Marczak", time: "07:20", text: "{{PRENOM}} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.", read: true },
       { from: "Théo Marczak", time: "07:21", text: "J'ai demandé à Jakob de vous être accessible sur Slack si vous avez des questions sur ce qu'il attend.", read: true }
     ],
     delayed: [
-      { from: "Sonia Ferracci", time: "+6min", text: "Lou, je sais que Théo t'a briefé. Si tu veux mon angle sur la strat avant de plonger dans les docs, je suis dispo. Il y a des choses qu'il ne t'a pas dites.", channel: "DM" },
-      { from: "Jakob Rein", time: "+22min", text: "Lou. Théo me dit que vous préparez la recommandation. One thing : I need a decision, not a diagnosis. If the document you produce doesn't end with a clear recommendation, it's not useful to me.", channel: "DM" }
+      { from: "Sonia Ferracci", time: "+6min", text: "{{PRENOM}}, je sais que Théo t'a briefé. Si tu veux mon angle sur la strat avant de plonger dans les docs, je suis dispo. Il y a des choses qu'il ne t'a pas dites.", channel: "DM" },
+      { from: "Jakob Rein", time: "+22min", text: "{{PRENOM}}. Théo me dit que vous préparez la recommandation. One thing : I need a decision, not a diagnosis. If the document you produce doesn't end with a clear recommendation, it's not useful to me.", channel: "DM" }
     ]
-  }
+  },
+
+  // ─── Seed Slack par canal (substitué via applyStudentPlaceholders) ───────
+  slackSeed: {
+    jakob: [
+      { from: 'Jakob Rein', avatar: 'JR', color: '#1b3a6b', time: '07:25', text: '{{PRENOM}}. Théo me dit que vous préparez la recommandation pour vendredi.' },
+      { from: 'Jakob Rein', avatar: 'JR', color: '#1b3a6b', time: '07:25', text: "One thing : I need a decision, not a diagnosis. If the document doesn't end with a clear recommendation, it's not useful to me." }
+    ],
+    sonia: [
+      { from: 'Sonia Ferracci', avatar: 'SF', color: '#c4420f', time: '07:31', text: "{{PRENOM}}, je sais que Théo t'a briefé. Si tu veux mon angle sur la strat avant de plonger dans les docs, je suis dispo." },
+      { from: 'Sonia Ferracci', avatar: 'SF', color: '#c4420f', time: '07:32', text: "Il y a des choses qu'il ne t'a pas dites. Notamment sur l'accord Darty. Dis-moi si tu veux qu'on se parle." }
+    ],
+    camille: [
+      { from: 'Camille Ott', avatar: 'CO', color: '#0a7a6e', time: '07:44', text: "Hello 👋 Bon courage pour la reco. Si tu veux les vrais chiffres du terrain — pas ceux du deck —, je suis là." }
+    ],
+    theo: [
+      { from: 'Théo Marczak', avatar: 'TM', color: '#5c2d8f', time: '07:20', text: "{{PRENOM}} — bien reçu mon mail ? Le board c'est vendredi. Jeudi soir max pour la reco." }
+    ],
+    'mission-board': [
+      { from: 'Théo Marczak', avatar: 'TM', color: '#5c2d8f', time: 'lun. 09:12', text: "J'ai missionné {{PRENOM}} pour préparer la recommandation board. @sonia @jakob merci de lui faciliter l'accès aux infos utiles." },
+      { from: 'Sonia Ferracci', avatar: 'SF', color: '#c4420f', time: 'lun. 09:34', text: "Reçu. {{PRENOM}} — je t'ai ajouté sur les canaux pertinents. Les docs sont sur ton espace partagé." },
+      { from: 'Jakob Rein', avatar: 'JR', color: '#1b3a6b', time: 'lun. 16:18', text: "I'll be in Paris Wednesday evening. Expecting a draft before dinner." }
+    ],
+    general: [
+      { from: 'lumio-bot', avatar: '🤖', color: '#9a9ea8', time: '08:00', text: '☀️ Bonjour à tous · 18 personnes connectées ce matin' }
+    ]
+  },
 };
 
 // ══════════════════════════════════════════════════════════════
