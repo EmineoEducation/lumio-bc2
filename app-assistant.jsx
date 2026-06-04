@@ -23,13 +23,13 @@ function buildJeffersonPrompt(studentName, elapsedMin) {
     nextAction = 'Ouvrir Aperçu. Lire le Deck Board Q3 — slide par slide. Repérer les chiffres clés et les zones de tension (churn, budget, MDR). Comparer avec la veille Yassine.';
   } else if (elapsedMin < 95) {
     phase = 'Acte 3 — Diagnostic (50–95 min)';
-    objectifPhase = 'Construire votre position sur Slack avec Jakob. Il teste chaque hypothèse. 2 échanges débloquent l\'app Livrable. Sonia et Camille sont aussi disponibles.';
+    objectifPhase = 'Construire votre position sur Slack avec Jakob. Il teste chaque hypothèse. Au moins 2 échanges recommandés. Sonia et Camille sont aussi disponibles.';
     toolsPhase = 'Slack (DM Jakob Rein prioritaire, aussi Sonia Ferracci et Camille Ott), Notes (note confidentielle de Théo disponible)';
     nextAction = 'Ouvrir Slack. Écrire à Jakob votre première hypothèse sur le scénario à recommander. Soyez direct — il attend un scénario, pas une analyse de contexte.';
   } else if (elapsedMin < 175) {
     phase = 'Acte 4 — Production (95–175 min)';
     objectifPhase = 'Rédiger la recommandation stratégique BC2. 6 compétences RNCP (C.7 à C.12). Format exact de l\'épreuve de rattrapage.';
-    toolsPhase = 'App Livrable (débloquée après 2 échanges Slack) — formulaire C.7 à C.12, gabarit scénarios disponible pour C.11';
+    toolsPhase = 'App Livrable (toujours disponible dans le dock) — formulaire C.7 à C.12, gabarit scénarios disponible pour C.11';
     nextAction = 'Ouvrir l\'app Livrable dans le dock. Remplir dans l\'ordre : C.7 (objectifs SMART) → C.8 (cibles) → C.9 (axes) → C.10 (canaux) → C.11 (scénarios + ROI) → C.12 (budget).';
   } else {
     phase = 'Acte 5 — Réflexion (175–210 min)';
@@ -85,6 +85,11 @@ CE QUE TU NE FERAS PAS :
 - Rédiger la recommandation ou un scénario à sa place
 - Jouer un personnage de l'univers Lumio (tu n'es ni Jakob, ni Théo)
 - Donner un cours théorique sur la stratégie marcom
+- INVENTER l'emplacement, l'apparence ou l'existence d'un élément d'interface. Tu ne décris jamais une icône « souvent représentée par… » ni ne renvoies vers un « support technique ». Si tu n'es pas certain, tu t'en tiens à l'inventaire ci-dessous.
+
+INTERFACE RÉELLE (dock en bas de l'écran, de gauche à droite) :
+Finder, Mail, Safari, Aperçu (PDF), Mémos vocaux, Notes, Bloc-notes, Slack, Calendrier, Jefferson, et — toujours présente — l'app LIVRABLE, puis la Corbeille.
+L'app Livrable est accessible À TOUT MOMENT : elle est toujours dans le dock, pas besoin de la débloquer. Si l'étudiant dit qu'il ne la trouve pas, dis-lui simplement de cliquer sur l'icône Livrable dans le dock en bas — rien d'autre.
 
 STYLE :
 - 2 à 4 phrases max par réponse

@@ -28,47 +28,6 @@ window.LUMIO_SESSION = {
   clear: (id) => apiSession('DELETE', id),
 };
 
-// ─── Substitution des placeholders étudiant ─────────────────
-// Remplace {{PRENOM}} / {{EMAIL_ETUDIANT}} dans toutes les données narratives.
-// Idempotent : utilise les gabarits d'origine conservés dans _tpl.
-function applyStudentPlaceholders(fullName) {
-  const D = window.LUMIO_DATA;
-  if (!D) return;
-  const prenom = (fullName || '').split(' ')[0] || 'Consultant·e';
-  const email = D.student?.email || '{{EMAIL_ETUDIANT}}';
-  const sub = (s) => (s || '')
-    .replace(/\{\{\s*PRENOM\s*\}\}/g, prenom)
-    .replace(/\{\{\s*EMAIL_ETUDIANT\s*\}\}/g, email);
-
-  // Conserver les gabarits d'origine pour rester idempotent (reload, changement de nom)
-  D._tpl = D._tpl || {
-    briefBody: D.briefEmail?.body,
-    briefTo: D.briefEmail?.to,
-    slackInitial: (D.slackMessages?.initial || []).map(m => m.text),
-    slackDelayed: (D.slackMessages?.delayed || []).map(m => m.text),
-    slackSeed: D.slackSeed ? JSON.parse(JSON.stringify(D.slackSeed)) : null,
-  };
-  if (D.briefEmail) {
-    D.briefEmail.body = sub(D._tpl.briefBody);
-    D.briefEmail.to = sub(D._tpl.briefTo);
-  }
-  if (D.slackMessages?.initial) {
-    D.slackMessages.initial.forEach((m, i) => { m.text = sub(D._tpl.slackInitial[i]); });
-  }
-  if (D.slackMessages?.delayed) {
-    D.slackMessages.delayed.forEach((m, i) => { m.text = sub(D._tpl.slackDelayed[i]); });
-  }
-  // Seed Slack par canal — resubstitué depuis le gabarit d'origine
-  if (D.slackSeed && D._tpl.slackSeed) {
-    Object.keys(D._tpl.slackSeed).forEach(ch => {
-      D.slackSeed[ch] = D._tpl.slackSeed[ch].map(m => ({ ...m, text: sub(m.text) }));
-    });
-  }
-  // Aperçu Mail dérivé du nom (remplace l'ancien "Lou," codé en dur)
-  D._briefPreview = `${prenom}, Je vais être direct parce qu'on n'a pas le temps. Le board Northgate…`;
-}
-window.applyStudentPlaceholders = applyStudentPlaceholders;
-
 // ─── Saisie du nom (avant le login) ─────────────────────────
 function NameScreen({ onConfirm }) {
   const [prenom, setPrenom] = useRootState('');
@@ -96,7 +55,6 @@ function NameScreen({ onConfirm }) {
     window.LUMIO_DATA.student.name = full;
     window.LUMIO_DATA.student.email = email.trim().toLowerCase();
     window.LUMIO_DATA.student.initial = prenom.trim()[0].toUpperCase();
-    window.applyStudentPlaceholders(full);
     onConfirm(full, email.trim().toLowerCase());
   };
 
@@ -415,10 +373,8 @@ function Root() {
       // Patcher les données avec le nom et l'email sauvegardés
       window.LUMIO_DATA.student.name = n;
       if (session.studentEmail) window.LUMIO_DATA.student.email = session.studentEmail;
-      window.LUMIO_DATA.student.initial = (n.trim()[0] || '?').toUpperCase();
-      applyStudentPlaceholders(n);
-      // Restaurer le timer fictif AVANT d'afficher le bureau (sinon l'horloge se réinitialise)
-      if (session.timerStart) window.LUMIO_TIMER_START = session.timerStart;
+      window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${n.split(' ')[0]},`);
+      window.LUMIO_DATA.slackMessages.initial[0].text = `${n.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
       // Reprendre directement sur le bureau
       setPhase('desktop');
     });
@@ -431,8 +387,8 @@ function Root() {
     setStudentName(name);
     window.LUMIO_DATA.student.name = name;
     window.LUMIO_DATA.student.email = studentEmail || `${name.split(' ')[0].toLowerCase()}@consult.fr`;
-    window.LUMIO_DATA.student.initial = (name.trim()[0] || '?').toUpperCase();
-    applyStudentPlaceholders(name);
+    window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${name.split(' ')[0]},`);
+    window.LUMIO_DATA.slackMessages.initial[0].text = `${name.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
     window.LUMIO_SESSION.save(sid, { studentName: name, studentEmail: studentEmail || '', phase: 'login' });
     setShowLogin(true);
     setPhase('login');
