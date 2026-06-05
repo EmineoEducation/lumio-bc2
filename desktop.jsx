@@ -18,8 +18,7 @@ const APP_META = {
   finder:   { title: 'Finder',       w:  820, h: 540, icon: 'FinderIcon' },
   calendar: { title: 'Calendrier',   w:  780, h: 580, icon: 'CalendarIcon' },
   trash:    { title: 'Corbeille',    w:  500, h: 360, icon: 'TrashIcon' },
-  livrable:  { title: 'Livrable — BC2',        w: 920, h: 620, icon: 'LivrableIcon' },
-  jefferson: { title: 'Jefferson · Guide PAC', w: 480, h: 560, icon: 'JeffersonIcon' }
+  livrable:  { title: 'Livrable — BC2',        w: 920, h: 620, icon: 'LivrableIcon' }
 };
 
 // ═════ Window component ═════════════════════════════════════
@@ -232,16 +231,11 @@ function Dock({ openApp, openWindows, livrableUnlocked }) {
     { id: 'notepad', label: 'Bloc-notes' },
     { id: 'slack', label: 'Slack' },
     { id: 'calendar', label: 'Calendrier' },
-    { id: 'jefferson', label: 'Jefferson' },
     { id: 'trash', label: 'Corbeille' }
   ];
-  // Livrable TOUJOURS présent dans le dock (accessible à tout moment).
-  // Le bounce reste un indice visuel temporaire quand le commanditaire a assez d'éléments.
-  const items = [
-    ...baseItems.slice(0, -1),
-    { id: 'livrable', label: 'Livrable', bounce: livrableUnlocked },
-    baseItems[baseItems.length - 1]
-  ];
+  const items = livrableUnlocked
+    ? [...baseItems.slice(0, -1), { id: 'livrable', label: 'Livrable', bounce: true }, baseItems[baseItems.length - 1]]
+    : baseItems;
 
   // CSS bounce injecté une fois
   useWmEffect(() => {
@@ -834,6 +828,7 @@ Camille`
           onMouseEnter={e => { e.currentTarget.style.background = 'rgba(26,102,65,0.85)'; e.currentTarget.style.color = 'white'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'rgba(245,243,239,0.55)'; e.currentTarget.style.color = 'var(--ink-soft)'; }}
         >?</button>
+        {window.JeffersonApp && React.createElement(window.JeffersonApp)}
       </div>
     </WindowsCtx.Provider>
   );
