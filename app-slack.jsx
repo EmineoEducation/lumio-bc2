@@ -128,7 +128,7 @@ function SlackApp({ openChannel }) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: 'claude-sonnet-4-5',
+            model: 'claude-sonnet-4-6',
             max_tokens: 400,
             messages: [{ role: 'user', content: prompt }]
           })
@@ -197,7 +197,7 @@ function SlackApp({ openChannel }) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              model: 'claude-sonnet-4-5',
+              model: 'claude-sonnet-4-6',
               max_tokens: 500,
               system: JAKOB_PROMPT,
               messages: [{ role: 'user', content: userPrompt }]
