@@ -430,7 +430,7 @@ Sur la concurrence : « Biostream fait peur. Samsung fait de la techno. Nous, si
 //  PAC · Parcours Activation Compétences
 // ══════════════════════════════════════════════════════════════
 window.PASS_CONFIG = {
-  bloc: 'BC2',
+  bloc: 'bc2',
   titre: 'Stratégie marketing communication',
   epreuve: 'E4 — Proposition de stratégie marketing communication',
   deadline: 'Jeudi 15 octobre 2026 · 20h00 (avant board vendredi)',
