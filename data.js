@@ -431,6 +431,26 @@ Sur la concurrence : « Biostream fait peur. Samsung fait de la techno. Nous, si
 // ══════════════════════════════════════════════════════════════
 window.PASS_CONFIG = {
   bloc: 'bc2',
+  accroche_namescreen: {
+    "subtitle": "Une recommandation à défendre devant le board",
+    "role": "consultant·e en stratégie marketing",
+    "intro": "Tu es {{STUDENT}}, consultant·e stratégie marketing. Théo Marczak t'a confié la recommandation d'orientations stratégiques que Lumio Health défendra vendredi devant son board Northgate : tenir le B2B ou pivoter vers le B2C. Chiffres Q3, portefeuille clients, projection B2C, veille concurrentielle et email confidentiel de Jakob sont sur ton poste.",
+    "ratio_label": "3 semaines dans la vraie vie",
+    "regles": [
+      {
+        "ico": "📄",
+        "txt": "Tout ce que tu sais, c'est dans les documents du board."
+      },
+      {
+        "ico": "🤐",
+        "txt": "Jakob Rein teste chaque hypothèse — il ne cherche pas à t'aider, il protège son investissement."
+      },
+      {
+        "ico": "💬",
+        "txt": "Quand tu as une hypothèse solide → Slack → Jakob. Sa réaction débloque la suite."
+      }
+    ]
+  },
   titre: 'Stratégie marketing communication',
   epreuve: 'E4 — Proposition de stratégie marketing communication',
   deadline: 'Jeudi 15 octobre 2026 · 20h00 (avant board vendredi)',

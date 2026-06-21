@@ -28,27 +28,6 @@ window.LUMIO_SESSION = {
   clear: (id) => apiSession('DELETE', id),
 };
 
-// Substitue {{PRENOM}} {{NOM}} {{EMAIL_ETUDIANT}} PARTOUT dans LUMIO_DATA, en un seul passage.
-function applyStudent(fullName, email) {
-  // Échappe les seules entrées libres de l'étudiant (vecteur XSS via dangerouslySetInnerHTML).
-  // Le narratif de data.js, lui, reste du HTML riche contrôlé et n'est pas touché.
-  const escHtml = (s) => String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  const prenom = escHtml((fullName || '').split(' ')[0] || '');
-  const nom    = escHtml((fullName || '').split(' ').slice(1).join(' '));
-  const map = { '{{PRENOM}}': prenom, '{{NOM}}': nom, '{{EMAIL_ETUDIANT}}': escHtml(email || '') };
-  try {
-    const json = JSON.stringify(window.LUMIO_DATA)
-      .replace(/\{\{PRENOM\}\}|\{\{NOM\}\}|\{\{EMAIL_ETUDIANT\}\}/g, m => map[m]);
-    window.LUMIO_DATA = JSON.parse(json);
-  } catch (e) { /* données déjà substituées */ }
-  window.LUMIO_DATA.student = window.LUMIO_DATA.student || {};
-  window.LUMIO_DATA.student.name = fullName;
-  if (email) window.LUMIO_DATA.student.email = email;
-  window.LUMIO_DATA.student.initial = (prenom[0] || '?').toUpperCase();
-}
-
 // ─── Saisie du nom (avant le login) ─────────────────────────
 function NameScreen({ onConfirm }) {
   const [prenom, setPrenom] = useRootState('');
@@ -97,11 +76,9 @@ function NameScreen({ onConfirm }) {
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       color: 'white', padding: '2rem'
     }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>{(window.PAC_CONFIG ? window.PAC_CONFIG.dispositif + ' · ' + window.PAC_CONFIG.bloc : 'PAC')}</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>PAC · MSMC · BC2</div>
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 200, letterSpacing: '-0.02em', marginBottom: 8, textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>Lumio Health</div>
-      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 40 }}>
-        {(window.PAC_CONFIG && window.PAC_CONFIG.accroche_namescreen) || (window.LUMIO_DATA && window.LUMIO_DATA.mission && window.LUMIO_DATA.mission.titre_affaire) || 'Une mission à traiter'}
-      </div>
+      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 40 }}>{(window.PAC_CONFIG && window.PAC_CONFIG.accroche_namescreen && window.PAC_CONFIG.accroche_namescreen.subtitle) || 'Un dossier à traiter'}</div>
 
       <div style={{
         background: 'rgba(255,255,255,0.12)',
@@ -114,20 +91,8 @@ function NameScreen({ onConfirm }) {
         animation: shake ? 'shake 0.4s ease' : 'none'
       }}>
         <div style={{ fontSize: 13, opacity: 0.85, marginBottom: 22, lineHeight: 1.6 }}>
-          {(() => {
-            const cfg = window.PAC_CONFIG || {};
-            const data = window.LUMIO_DATA || {};
-            const role = (data.student && data.student.role) || cfg.role_etudiant || 'consultant·e externe';
-            const dispositif = cfg.dispositif || 'PAC';
-            const bloc = cfg.bloc || '';
-            return (
-              <>
-                Tu vas entrer dans ce dossier en tant que <strong>{role}</strong>
-                {cfg.commanditaire ? <> — mission confiée par <strong>{cfg.commanditaire}</strong></> : null}.<br/>
-                <span style={{ opacity: 0.7 }}>Identifie-toi pour accéder à ton poste de travail {dispositif}{bloc ? ' · ' + bloc : ''}.</span>
-              </>
-            );
-          })()}
+          Tu vas entrer dans ce dossier en tant que consultant·e externe.<br/>
+          <span style={{ opacity: 0.7 }}>Identifie-toi pour recevoir ton portfolio de compétences.</span>
         </div>
 
         {/* Prénom + Nom */}
@@ -274,6 +239,8 @@ function LoginScreen({ onLogin, studentName }) {
 function WelcomeBriefCard({ onClose, studentName }) {
   const prenom = studentName.split(' ')[0];
   const [accepted, setAccepted] = useRootState(false);
+  const __acc = (window.PAC_CONFIG && window.PAC_CONFIG.accroche_namescreen) || null;
+
 
   const handleStart = () => {
     if (!accepted) return;
@@ -304,32 +271,18 @@ function WelcomeBriefCard({ onClose, studentName }) {
         padding: '32px 36px', boxShadow: '0 30px 80px rgba(0,0,0,0.45)'
       }}>
         {/* Header */}
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.25em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 10 }}>{(window.PAC_CONFIG ? window.PAC_CONFIG.dispositif + ' · ' + window.PAC_CONFIG.bloc : 'PAC')}</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.25em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 10 }}>PAC · MSMC RNCP 38504 · Bloc 2</div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
           Bienvenue, {prenom}.
         </h1>
-        <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--ink-soft)', marginBottom: 10 }}>
-          {(() => {
-            const cfg  = window.PAC_CONFIG || {};
-            const data = window.LUMIO_DATA || {};
-            const mission = data.mission || {};
-            const role = ((data.student && data.student.role) || 'consultant·e externe').toLowerCase();
-            const commanditaire = cfg.commanditaire || 'le commanditaire';
-            const commanditaireRole = mission.commanditaire_role || '';
-            const titreAffaire = mission.titre_affaire || (cfg.titre || 'la mission');
-            const situation = mission.situation || '';
-            const enjeu = mission.enjeu_central || '';
-            const docsLabel = mission.documents_label || 'le poste de mission';
-            return (
-              <>
-                Tu es <strong>{studentName}</strong>, {role}. <strong>{commanditaire}</strong>
-                {commanditaireRole ? ' (' + commanditaireRole + ')' : ''} t'a confié une mission urgente :{' '}
-                <strong>{titreAffaire}</strong>. {situation ? situation + ' ' : ''}
-                Tu as accès à un poste de mission contenant {docsLabel}.{' '}
-                {enjeu ? <em>{enjeu}</em> : null}
-              </>
-            );
-          })()}
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--ink-soft)', marginBottom: 10 }}>
+          {__acc && __acc.intro
+            ? __acc.intro.split('{{STUDENT}}').reduce((out, part, i) => {
+                if (i > 0) out.push(<strong key={'s'+i}>{studentName}</strong>);
+                out.push(<React.Fragment key={'t'+i}>{part}</React.Fragment>);
+                return out;
+              }, [])
+            : <span>Tu es <strong>{studentName}</strong>, consultant·e externe. Tu disposes d'un poste de mission dédié pour produire le livrable attendu par le jury.</span>}
         </p>
 
         {/* Bloc temporel — central */}
@@ -337,7 +290,7 @@ function WelcomeBriefCard({ onClose, studentName }) {
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 12 }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 26, fontWeight: 700, color: 'white', letterSpacing: '-0.02em' }}>3h30</span>
             <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-mono)' }}>=</span>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)' }}>{(window.LUMIO_DATA && window.LUMIO_DATA.mission && window.LUMIO_DATA.mission.ratio_label) || '18 jours dans la vraie vie'}</span>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)' }}>{__acc && __acc.ratio_label ? __acc.ratio_label : '3 semaines dans la vraie vie'}</span>
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {actes.map(a => (
@@ -362,15 +315,11 @@ function WelcomeBriefCard({ onClose, studentName }) {
         <div style={{ background: '#f7f4ef', borderRadius: 8, padding: '14px 18px', marginBottom: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink)', fontFamily: 'var(--font-mono)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>Trois règles, pas de négociation</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {(() => {
-              const cmd = (window.PAC_CONFIG && window.PAC_CONFIG.commanditaire) || 'le commanditaire';
-              const cmdPrenom = cmd.split(/\s+/)[0] || cmd;
-              return [
-                { ico: '📄', txt: 'Tout ce que tu sais, c\'est dans les documents.' },
-                { ico: '🤐', txt: cmd + ' ne te dira pas « si c\'est juste ». ' + cmdPrenom + ' teste tes hypothèses sans te donner la réponse — et sans te juger publiquement.' },
-                { ico: '💬', txt: 'Quand tu as une hypothèse solide → Slack → ' + cmdPrenom + '. Sa réaction débloque la suite.' },
-              ];
-            })().map((r, i) => (
+            {(__acc && __acc.regles && __acc.regles.length ? __acc.regles : [
+              { ico: '📄', txt: 'Tout ce que tu sais, c\'est dans les documents du poste de mission.' },
+              { ico: '🤐', txt: 'Le jury teste chaque hypothèse. Il ne cherche pas à t\'aider — il évalue.' },
+              { ico: '💬', txt: 'Quand tu as une hypothèse solide → Slack → ton commanditaire. Sa réaction débloque la suite.' },
+            ]).map((r, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <span style={{ fontSize: 16, flexShrink: 0 }}>{r.ico}</span>
                 <span style={{ fontSize: 13, color: '#2a2620', lineHeight: 1.55 }}>{r.txt}</span>
@@ -411,20 +360,6 @@ function WelcomeBriefCard({ onClose, studentName }) {
 }
 
 // ─── ROOT ────────────────────────────────────────────────────
-// Lit les URL params transmis par le portail (?p=Prénom&n=Nom&e=email).
-// Si les 3 sont présents ET email valide → bypass NameScreen + lockscreen.
-function readPortalParams() {
-  try {
-    const sp = new URLSearchParams(window.location.search);
-    const p = (sp.get('p') || '').trim();
-    const n = (sp.get('n') || '').trim();
-    const e = (sp.get('e') || '').trim().toLowerCase();
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-    if (p && emailOk) return { prenom: p, nom: n, email: e, fullName: p + (n ? ' ' + n : '') };
-  } catch (_) { /* SSR-safe / malformed URL */ }
-  return null;
-}
-
 function Root() {
   const [phase, setPhase] = useRootState('loading'); // loading | name | login | brief | desktop
   const [studentName, setStudentName] = useRootState('');
@@ -432,30 +367,8 @@ function Root() {
   const [sessionId, setSessionId] = useRootState(null);
   const [timerStart, setTimerStart] = useRootState(null);
 
-  // Au montage : 1) URL params du portail → bypass direct au brief
-  //              2) sinon, tenter de restaurer une session existante
-  //              3) sinon, démarrer en NameScreen
+  // Au montage : tenter de restaurer une session existante
   useRootEffect(() => {
-    // ── 1. URL params du portail (?p=&n=&e=) ──
-    const portal = readPortalParams();
-    if (portal) {
-      const sid = makeSessionId(portal.fullName + Date.now());
-      localStorage.setItem('lumio_sid', sid);
-      setSessionId(sid);
-      setStudentName(portal.fullName);
-      applyStudent(portal.fullName, portal.email);
-      window.LUMIO_SESSION.save(sid, {
-        studentName: portal.fullName,
-        studentEmail: portal.email,
-        phase: 'brief',
-        fromPortal: true
-      });
-      // Direct au brief (sans NameScreen ni lockscreen)
-      setPhase('brief');
-      return;
-    }
-
-    // ── 2. Session existante en cache ──
     const savedId = localStorage.getItem('lumio_sid');
     if (!savedId) { setPhase('name'); return; }
     window.LUMIO_SESSION.load(savedId).then(session => {
@@ -464,12 +377,12 @@ function Root() {
       const n = session.studentName;
       setStudentName(n);
       setSessionId(savedId);
-      if (session.timerStart) {
-        setTimerStart(session.timerStart);
-        window.LUMIO_TIMER_START = session.timerStart; // FIX : sans ça le timer repartait de 0 au reload
-      }
-      // Substituer le nom/email partout dans les données
-      applyStudent(n, session.studentEmail);
+      if (session.timerStart) setTimerStart(session.timerStart);
+      // Patcher les données avec le nom et l'email sauvegardés
+      window.LUMIO_DATA.student.name = n;
+      if (session.studentEmail) window.LUMIO_DATA.student.email = session.studentEmail;
+      window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${n.split(' ')[0]},`);
+      window.LUMIO_DATA.slackMessages.initial[0].text = `${n.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
       // Reprendre directement sur le bureau
       setPhase('desktop');
     });
@@ -480,7 +393,10 @@ function Root() {
     localStorage.setItem('lumio_sid', sid);
     setSessionId(sid);
     setStudentName(name);
-    applyStudent(name, studentEmail || `${name.split(' ')[0].toLowerCase()}@consult.fr`);
+    window.LUMIO_DATA.student.name = name;
+    window.LUMIO_DATA.student.email = studentEmail || `${name.split(' ')[0].toLowerCase()}@consult.fr`;
+    window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${name.split(' ')[0]},`);
+    window.LUMIO_DATA.slackMessages.initial[0].text = `${name.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
     window.LUMIO_SESSION.save(sid, { studentName: name, studentEmail: studentEmail || '', phase: 'login' });
     setShowLogin(true);
     setPhase('login');
