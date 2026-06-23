@@ -28,6 +28,27 @@ window.LUMIO_SESSION = {
   clear: (id) => apiSession('DELETE', id),
 };
 
+// Substitue {{PRENOM}} {{NOM}} {{EMAIL_ETUDIANT}} PARTOUT dans LUMIO_DATA, en un seul passage.
+function applyStudent(fullName, email) {
+  // Échappe les seules entrées libres de l'étudiant (vecteur XSS via dangerouslySetInnerHTML).
+  // Le narratif de data.js, lui, reste du HTML riche contrôlé et n'est pas touché.
+  const escHtml = (s) => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  const prenom = escHtml((fullName || '').split(' ')[0] || '');
+  const nom    = escHtml((fullName || '').split(' ').slice(1).join(' '));
+  const map = { '{{PRENOM}}': prenom, '{{NOM}}': nom, '{{EMAIL_ETUDIANT}}': escHtml(email || '') };
+  try {
+    const json = JSON.stringify(window.LUMIO_DATA)
+      .replace(/\{\{PRENOM\}\}|\{\{NOM\}\}|\{\{EMAIL_ETUDIANT\}\}/g, m => map[m]);
+    window.LUMIO_DATA = JSON.parse(json);
+  } catch (e) { /* données déjà substituées */ }
+  window.LUMIO_DATA.student = window.LUMIO_DATA.student || {};
+  window.LUMIO_DATA.student.name = fullName;
+  if (email) window.LUMIO_DATA.student.email = email;
+  window.LUMIO_DATA.student.initial = (prenom[0] || '?').toUpperCase();
+}
+
 // ─── Saisie du nom (avant le login) ─────────────────────────
 function NameScreen({ onConfirm }) {
   const [prenom, setPrenom] = useRootState('');
@@ -76,7 +97,7 @@ function NameScreen({ onConfirm }) {
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       color: 'white', padding: '2rem'
     }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>PAC · MSMC · BC2</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.7, marginBottom: 8 }}>{(window.PAC_CONFIG ? window.PAC_CONFIG.dispositif + ' · ' + window.PAC_CONFIG.bloc : 'PAC')}</div>
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 200, letterSpacing: '-0.02em', marginBottom: 8, textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}>Lumio Health</div>
       <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, opacity: 0.7, marginBottom: 40 }}>{(window.PAC_CONFIG && window.PAC_CONFIG.accroche_namescreen && window.PAC_CONFIG.accroche_namescreen.subtitle) || 'Un dossier à traiter'}</div>
 
@@ -271,7 +292,7 @@ function WelcomeBriefCard({ onClose, studentName }) {
         padding: '32px 36px', boxShadow: '0 30px 80px rgba(0,0,0,0.45)'
       }}>
         {/* Header */}
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.25em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 10 }}>PAC · MSMC RNCP 38504 · Bloc 2</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.25em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 10 }}>{(window.PAC_CONFIG ? window.PAC_CONFIG.dispositif + ' · ' + window.PAC_CONFIG.bloc : 'PAC')}</div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
           Bienvenue, {prenom}.
         </h1>
@@ -360,6 +381,20 @@ function WelcomeBriefCard({ onClose, studentName }) {
 }
 
 // ─── ROOT ────────────────────────────────────────────────────
+// Lit les URL params transmis par le portail (?p=Prénom&n=Nom&e=email).
+// Si les 3 sont présents ET email valide → bypass NameScreen + lockscreen.
+function readPortalParams() {
+  try {
+    const sp = new URLSearchParams(window.location.search);
+    const p = (sp.get('p') || '').trim();
+    const n = (sp.get('n') || '').trim();
+    const e = (sp.get('e') || '').trim().toLowerCase();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    if (p && emailOk) return { prenom: p, nom: n, email: e, fullName: p + (n ? ' ' + n : '') };
+  } catch (_) { /* SSR-safe / malformed URL */ }
+  return null;
+}
+
 function Root() {
   const [phase, setPhase] = useRootState('loading'); // loading | name | login | brief | desktop
   const [studentName, setStudentName] = useRootState('');
@@ -367,8 +402,30 @@ function Root() {
   const [sessionId, setSessionId] = useRootState(null);
   const [timerStart, setTimerStart] = useRootState(null);
 
-  // Au montage : tenter de restaurer une session existante
+  // Au montage : 1) URL params du portail → bypass direct au brief
+  //              2) sinon, tenter de restaurer une session existante
+  //              3) sinon, démarrer en NameScreen
   useRootEffect(() => {
+    // ── 1. URL params du portail (?p=&n=&e=) ──
+    const portal = readPortalParams();
+    if (portal) {
+      const sid = makeSessionId(portal.fullName + Date.now());
+      localStorage.setItem('lumio_sid', sid);
+      setSessionId(sid);
+      setStudentName(portal.fullName);
+      applyStudent(portal.fullName, portal.email);
+      window.LUMIO_SESSION.save(sid, {
+        studentName: portal.fullName,
+        studentEmail: portal.email,
+        phase: 'brief',
+        fromPortal: true
+      });
+      // Direct au brief (sans NameScreen ni lockscreen)
+      setPhase('brief');
+      return;
+    }
+
+    // ── 2. Session existante en cache ──
     const savedId = localStorage.getItem('lumio_sid');
     if (!savedId) { setPhase('name'); return; }
     window.LUMIO_SESSION.load(savedId).then(session => {
@@ -377,12 +434,17 @@ function Root() {
       const n = session.studentName;
       setStudentName(n);
       setSessionId(savedId);
-      if (session.timerStart) setTimerStart(session.timerStart);
-      // Patcher les données avec le nom et l'email sauvegardés
-      window.LUMIO_DATA.student.name = n;
-      if (session.studentEmail) window.LUMIO_DATA.student.email = session.studentEmail;
-      window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${n.split(' ')[0]},`);
-      window.LUMIO_DATA.slackMessages.initial[0].text = `${n.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
+      if (session.timerStart) {
+        setTimerStart(session.timerStart);
+        window.LUMIO_TIMER_START = session.timerStart; // FIX : sans ça le timer repartait de 0 au reload
+      }
+      // Substituer le nom/email partout dans les données
+      applyStudent(n, session.studentEmail);
+      // Si la session vient du portail (fromPortal) : brief ou desktop, jamais lockscreen
+      if (session.fromPortal) {
+        setPhase(session.timerStart ? 'desktop' : 'brief');
+        return;
+      }
       // Reprendre directement sur le bureau
       setPhase('desktop');
     });
@@ -393,10 +455,7 @@ function Root() {
     localStorage.setItem('lumio_sid', sid);
     setSessionId(sid);
     setStudentName(name);
-    window.LUMIO_DATA.student.name = name;
-    window.LUMIO_DATA.student.email = studentEmail || `${name.split(' ')[0].toLowerCase()}@consult.fr`;
-    window.LUMIO_DATA.briefEmail.body = window.LUMIO_DATA.briefEmail.body.replace(/^Lou,/m, `${name.split(' ')[0]},`);
-    window.LUMIO_DATA.slackMessages.initial[0].text = `${name.split(' ')[0]} — bien reçu mon mail ? Le board c'est vendredi. Tu as jusqu'à jeudi soir.`;
+    applyStudent(name, studentEmail || `${name.split(' ')[0].toLowerCase()}@consult.fr`);
     window.LUMIO_SESSION.save(sid, { studentName: name, studentEmail: studentEmail || '', phase: 'login' });
     setShowLogin(true);
     setPhase('login');
@@ -446,6 +505,17 @@ function Root() {
     </>
   );
 }
+
+// Titre d'onglet piloté par la config — jamais codé en dur par bloc.
+(function setDocTitle() {
+  try {
+    const c = window.PAC_CONFIG || {};
+    const ent = c.entreprise || 'Lumio Health';
+    const bloc = (c.bloc || '').toUpperCase();
+    const disp = c.dispositif || 'PAC';
+    document.title = [disp, ent, bloc].filter(Boolean).join(' · ');
+  } catch (e) {}
+})();
 
 // Mount
 ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
