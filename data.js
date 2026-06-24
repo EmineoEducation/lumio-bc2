@@ -584,3 +584,7 @@ window.PASS_CONFIG = {
     marketing: { nom: 'Sonia Ferracci', role: 'Directrice Marketing', avatar: 'SF', couleur: '#c4420f' }
   }
 };
+
+
+// Alias de compatibilité — les apps génériques lisent window.PAC_CONFIG
+window.PAC_CONFIG = window.PASS_CONFIG;
