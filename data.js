@@ -431,6 +431,26 @@ Sur la concurrence : « Biostream fait peur. Samsung fait de la techno. Nous, si
 // ══════════════════════════════════════════════════════════════
 window.PASS_CONFIG = {
   bloc: 'bc2',
+  accroche_namescreen: {
+    "subtitle": "Une recommandation à défendre devant le board",
+    "role": "consultant·e en stratégie marketing",
+    "intro": "Tu es {{STUDENT}}, consultant·e stratégie marketing. Théo Marczak t'a confié la recommandation d'orientations stratégiques que Lumio Health défendra vendredi devant son board Northgate : tenir le B2B ou pivoter vers le B2C. Chiffres Q3, portefeuille clients, projection B2C, veille concurrentielle et email confidentiel de Jakob sont sur ton poste.",
+    "ratio_label": "3 semaines dans la vraie vie",
+    "regles": [
+      {
+        "ico": "📄",
+        "txt": "Tout ce que tu sais, c'est dans les documents du board."
+      },
+      {
+        "ico": "🤐",
+        "txt": "Jakob Rein teste chaque hypothèse — il ne cherche pas à t'aider, il protège son investissement."
+      },
+      {
+        "ico": "💬",
+        "txt": "Quand tu as une hypothèse solide → Slack → Jakob. Sa réaction débloque la suite."
+      }
+    ]
+  },
   titre: 'Stratégie marketing communication',
   epreuve: 'E4 — Proposition de stratégie marketing communication',
   deadline: 'Jeudi 15 octobre 2026 · 20h00 (avant board vendredi)',
@@ -564,3 +584,13 @@ window.PASS_CONFIG = {
     marketing: { nom: 'Sonia Ferracci', role: 'Directrice Marketing', avatar: 'SF', couleur: '#c4420f' }
   }
 };
+
+// === [PAC v2 complétion] juryPrompt + dispositif + accroche — auto-ajout ===
+(function() {
+  var cfg = window.PAC_CONFIG || window.PASS_CONFIG;
+  if (!cfg) return;
+  if (!cfg.juryPrompt) cfg.juryPrompt = "Tu es le jury certifiant du bloc 2 (Manager Stratégie Marketing & Communication — MSMC, RNCP 38504).\nContexte : Lumio Health — Recommandation d'orientations stratégiques pour le board Northgate Capital (Jakob Rein). Arbitrage B2B consolidé / pivot B2C / hybride séquencé. Budget Sonia 380K€ vs plafond Théo 200K€. Octobre 2026, board vendredi 16/10.\nTu évalues une production étudiante aux critères RNCP stricts. Sois exigeant mais juste.\nCritères éliminatoires :\n- Les objectifs proposés (C.7) ne respectent pas le format SMART (spécifique, mesurable, atteignable, réaliste, temporellement défini) sur un horizon 36 mois : la compétence est invalidée.\n- La segmentation cible (C.8) confond cœur de cible et cible secondaire, ou ne distingue pas DRH (B2B) et actifs urbains (B2C) avec une caractérisation socio-comportementale : invalidation C.8.\n- Les axes de communication (C.9) ne sont pas reliés à une proposition de valeur défendable ni adossés à un engagement RSE explicite : la compétence reste rhétorique.\n- Le choix des canaux (C.10) n'est pas justifié par un raisonnement omnicanal articulant LinkedIn / digital / événementiel selon les usages cibles : invalidation C.10.\n- L'évaluation des actions (C.11) ne comporte pas de scénarios comparés (B2B / B2C / hybride) ni de ROI estimés avec arbitrage explicite : la compétence est non validée.\n- La projection financière (C.12) ignore les chiffres documentés (200 000 €, 380 000 €) ou ne propose aucune allocation ventilée ni stratégie de négociation budgétaire : invalidation C.12.\n\nRéponds EXACTEMENT dans ce format :\n### C.7 — [Satisfaisant / Insuffisant / Absent]\nUne phrase de retour précise et exigeante.\n\n### C.8 — [Satisfaisant / Insuffisant / Absent]\nUne phrase de retour précise et exigeante.\n\n### C.9 — [Satisfaisant / Insuffisant / Absent]\nUne phrase de retour précise et exigeante.\n\n### C.10 — [Satisfaisant / Insuffisant / Absent]\nUne phrase de retour précise et exigeante.\n\n### C.11 — [Satisfaisant / Insuffisant / Absent]\nUne phrase de retour précise et exigeante.\n\n### C.12 — [Satisfaisant / Insuffisant / Absent]\nUne phrase de retour précise et exigeante.\n\n## Niveau global\n**[Non conforme / Partiellement conforme / Conforme / Conforme avec distinction]**\n\n## Question de jury\nUne question dérangeante que tu poserais à l'oral.";
+  window.PAC_CONFIG = cfg;
+  window.PASS_CONFIG = cfg;
+})();
+// === [PAC v2 complétion] fin ===
