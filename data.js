@@ -618,3 +618,222 @@ window.PASS_CONFIG = {
   window.PASS_CONFIG = cfg;
 })();
 // === [PAC v2 complétion] fin ===
+
+
+// === [Chantier PDF+Browser] dossiers/guide/portraits — 02/07/2026 ===
+// Restructuration de D.deckBoard + D.yassineVeille (déjà écrits) en D.dossiers[]. Guide construit depuis PAC_CONFIG.temps[].objectif/todoSuggere (déjà écrits).
+// Aucun contenu narratif nouveau : uniquement restructuration + câblage.
+(function() {
+  var D = window.LUMIO_DATA;
+  if (!D) return;
+  D.dossiers = [
+  {
+    "id": "deck-board",
+    "title": "Lumio Health — Board Q3 2026",
+    "tab": "Présentation board",
+    "accent": "#1b3a6b",
+    "type": "deck",
+    "subtitle": "Revue trimestrielle · Confidentiel Northgate Capital",
+    "slides": [
+      {
+        "titre": "Chiffres clés Q3",
+        "contenu": "Chiffre d'affaires YTD : 4,2 M€ (+8 % vs N-1)\nARR B2B : 5,1 M€\nChurn annualisé : 4,1 %\nNouveaux clients B2B Q3 : 7\nPipeline qualifié Q4 : 890 K€\nNPS clients B2B : 67"
+      },
+      {
+        "titre": "Portefeuille clients",
+        "contenu": "Clients actifs facturés : 230 entreprises\nRépartition sectorielle : Services 38% · Industrie 29% · Santé 18% · Public 15%\nTop 10 clients : 41 % du CA\nDurée moyenne contrat : 2,8 ans\nTaux de renouvellement (12 mois glissants) : 89 %"
+      },
+      {
+        "titre": "Marché & concurrence",
+        "contenu": "Biostream (Flow Patch Pro) : certifié MDR IIa jan. 2026 — hausse prix +22 %\nNeuroflow (Calm Band) : certifié MDR IIa mars 2026 — partenariat Fnac\nApple Watch S10 : pas dans le scope MDR — marché grand public\nWithings ScanWatch 2 : statut MDR non communiqué\n\nLumio MDR : procédure en cours — \"avancement selon calendrier prévu\""
+      },
+      {
+        "titre": "Projection B2C — scénario Northgate",
+        "contenu": "Marché adressable B2C France : 12 M de personnes (actifs 30-50, urbains, CSP+)\nObjectif part de marché an 3 : 0,8 % soit ~96 000 utilisateurs\nCA B2C cible an 3 : 14,4 M€ (abonnement 150 €/an)\nInvestissement marketing estimé : 8,2 M€ sur 36 mois\nBreak-even B2C : mois 28\n\nHypothèse clé : lancement Q2 2027 post-MDR"
+      },
+      {
+        "titre": "Budget marketing demandé",
+        "contenu": "Phase 1 (oct. 2026 – sept. 2027) : 380 000 €\n  — Création & production : 85 000 €\n  — Événementiel B2B : 60 000 €\n  — Digital & content : 95 000 €\n  — Relations presse & influence : 70 000 €\n  — Études & data : 40 000 €\n  — Réserve : 30 000 €\n\nPlafond validé direction à ce stade : 200 000 €\nÉcart non résolu : 180 000 €"
+      }
+    ]
+  },
+  {
+    "id": "veille",
+    "title": "Veille concurrentielle — Healthtech & Wearables stress",
+    "tab": "Veille",
+    "accent": "#0a7a6e",
+    "type": "rich",
+    "pages": [
+      {
+        "kicker": "Yassine Morel, Content Manager",
+        "title": "Veille concurrentielle — Healthtech & Wearables stress",
+        "byline": "Yassine Morel, Content Manager · IMPORTANT : ce document date de mars 2026 — informations potentiellement dépassées",
+        "blocks": [
+          {
+            "type": "h3",
+            "text": "NOTE PRÉLIMINAIRE"
+          },
+          {
+            "type": "p",
+            "text": "Ce document a été produit en mars 2026 dans le cadre de la préparation du\ncomité de direction de juin. Certaines informations ont pu évoluer depuis lors.\nJe n'ai pas pu le mettre à jour faute de temps et d'accès aux sources premium."
+          },
+          {
+            "type": "h3",
+            "text": "I. ÉTAT DU MARCHÉ (mars 2026)"
+          },
+          {
+            "type": "p",
+            "text": "Taille marché wearables santé Europe : 4,8 Md€ en 2025, croissance estimée\n+18 % /an. Segment stress/bien-être B2B : ~340 M€ France, dominé par 3-4 acteurs."
+          },
+          {
+            "type": "p",
+            "text": "Fait marquant : Biostream vient de lever 15 M€ en série C pour attaquer le B2C\ngrand public. Annonce de presse : \"Nous allons démocratiser la mesure du stress\".\n→ Si ce plan se concrétise, ils arrivent sur notre marché B2C potentiel avec une\ncertification MDR et 15 M€ de budget marketing. À surveiller."
+          },
+          {
+            "type": "h3",
+            "text": "II. CONCURRENTS DIRECTS"
+          },
+          {
+            "type": "p",
+            "text": "Biostream — Flow Patch Pro\nCertification MDR IIa obtenue janvier 2026. Hausse tarifaire B2B immédiate\n(+22 %). Trois contrats hospitaliers signés en février-mars.\nLevée 15 M€ série C annoncée (usage : expansion B2C, Allemagne et Espagne)."
+          },
+          {
+            "type": "p",
+            "text": "Neuroflow — Calm Band\nCertification MDR IIa mars 2026. Partenariat de distribution avec la Fnac\nannoncé — lancement grand public prévu T4 2026. Prix public : 299 €.\n→ Ce sera leur premier produit B2C. À surveiller pour la comparaison d'image."
+          },
+          {
+            "type": "p",
+            "text": "Withings — ScanWatch 2\nStatut MDR : non communiqué officiellement. Site institutionnel flou.\nPositionnement : wellness premium, pas médical. Prix : 299 €/unité."
+          },
+          {
+            "type": "p",
+            "text": "Apple Watch Series 10\nHors scope MDR (positionné \"bien-être\", pas \"médical\").\nPart de marché grand public : ~60 % des wearables en France.\nRumeur (non confirmée) : partenariat avec Malakoff Humanis pour offre RH."
+          },
+          {
+            "type": "h3",
+            "text": "III. TENDANCES IDENTIFIÉES (mars 2026)"
+          },
+          {
+            "type": "p",
+            "text": "— La certification MDR devient critère d'achat n°1 en B2B institutionnel\n— Le marché B2C \"sérieux\" (médical-grade) est encore peu occupé\n— Les mutuelles cherchent des partenaires wearables pour offres prévention\n— L'IA générative commence à entrer dans les algorithmes de stress (signal faible)"
+          },
+          {
+            "type": "h3",
+            "text": "IV. CE QUE JE N'AI PAS PU COUVRIR"
+          },
+          {
+            "type": "p",
+            "text": "— Statut exact MDR Lumio (Théo n'a pas répondu à mes sollicitations)\n— Suite de la levée Biostream et de leur plan B2C (info mars 2026 seulement)\n— Confirmation ou infirmation du partenariat Apple / Malakoff Humanis\n— Positionnement prix Neuroflow post-lancement Fnac (prix non encore communiqué)"
+          },
+          {
+            "type": "p",
+            "text": "Ces lacunes sont importantes. Les décisions stratégiques ne devraient pas\ns'appuyer uniquement sur ce document."
+          }
+        ]
+      }
+    ]
+  }
+];
+  D.guide = {
+  "tips": [
+    {
+      "day": "Acte 1",
+      "title": "Exploration",
+      "body": "Comprendre le contexte Lumio, identifier les enjeux du board, cartographier les positions en présence",
+      "action": "Lire la fiche contexte Lumio si vous découvrez l'univers (Finder) · Lire l'email de mission de Théo (Mail) · Lire l'email confidentiel de Jakob (Mail)"
+    },
+    {
+      "day": "Acte 2",
+      "title": "Structuration",
+      "body": "Construire l'analyse, identifier les scénarios, prendre position — remplir C.7 à C.10",
+      "action": "Lire la note interne de Théo (Finder — dossier Mission) · Écouter les verbatims de Camille Ott (Mémos vocaux) · Consulter la veille concurrentielle Yassine (PDF Viewer — attention : mars 2026)"
+    },
+    {
+      "day": "Acte 3",
+      "title": "Production",
+      "body": "Finaliser la recommandation stratégique complète — C.9 à C.12, budget, soumettre",
+      "action": "Finaliser C.9 (axes de communication) et C.10 (canaux) · Traiter C.11 : évaluer les scénarios et argumenter votre choix (tableau disponible) · Produire C.12 : projection budgétaire et position face à la tension 200K/380K"
+    }
+  ]
+};
+  D.portraits = [
+  {
+    "key": "theo_marczak",
+    "title": "Théo Marczak",
+    "file": "portraits/portrait_theo_marczak.html"
+  },
+  {
+    "key": "sonia_ferracci",
+    "title": "Sonia Ferracci",
+    "file": "portraits/portrait_sonia_ferracci.html"
+  },
+  {
+    "key": "camille_ott",
+    "title": "Camille Ott",
+    "file": "portraits/portrait_camille_ott.html"
+  },
+  {
+    "key": "jakob_rein",
+    "title": "Jakob Rein",
+    "file": "portraits/portrait_jakob_rein.html"
+  },
+  {
+    "key": "yassine_morel",
+    "title": "Yassine Morel",
+    "file": "portraits/portrait_yassine_morel.html"
+  }
+];
+  D.finder = D.finder || { folders: {}, order: [] };
+  D.finder.folders.portraits = {
+  "title": "Portraits",
+  "sidebar": "👥 Portraits",
+  "icon": "👥",
+  "items": [
+    {
+      "kind": "portrait",
+      "name": "Théo Marczak",
+      "app": "browser",
+      "props": {
+        "openPortrait": "theo_marczak"
+      }
+    },
+    {
+      "kind": "portrait",
+      "name": "Sonia Ferracci",
+      "app": "browser",
+      "props": {
+        "openPortrait": "sonia_ferracci"
+      }
+    },
+    {
+      "kind": "portrait",
+      "name": "Camille Ott",
+      "app": "browser",
+      "props": {
+        "openPortrait": "camille_ott"
+      }
+    },
+    {
+      "kind": "portrait",
+      "name": "Jakob Rein",
+      "app": "browser",
+      "props": {
+        "openPortrait": "jakob_rein"
+      }
+    },
+    {
+      "kind": "portrait",
+      "name": "Yassine Morel",
+      "app": "browser",
+      "props": {
+        "openPortrait": "yassine_morel"
+      }
+    }
+  ]
+};
+  if (D.finder.order.indexOf('portraits') === -1) {
+    var gIdx = D.finder.order.indexOf('guide');
+    D.finder.order.splice(gIdx >= 0 ? gIdx + 1 : 0, 0, 'portraits');
+  }
+})();
+// === [Chantier PDF+Browser] fin ===
