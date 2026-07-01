@@ -423,6 +423,30 @@ Sur la concurrence : « Biostream fait peur. Samsung fait de la techno. Nous, si
       { from: "Jakob Rein", time: "+22min", text: "Lou. Théo me dit que vous préparez la recommandation. One thing : I need a decision, not a diagnosis. If the document you produce doesn't end with a clear recommendation, it's not useful to me.", channel: "DM" }
     ]
   }
+,
+  finder: {
+    folders: {
+      guide: {
+        title: 'Guide de mission',
+        sidebar: '⌘ Guide',
+        icon: '📕',
+        items: [
+          { kind: 'mail', name: 'Brief de mission', app: 'mail', props: { openId: 'brief' } }
+        ]
+      },
+      espace: {
+        title: 'Espace de travail',
+        sidebar: 'Espace de travail',
+        icon: '📁',
+        items: [
+          { kind: 'mail', name: 'Boîte mail', app: 'mail', props: {} },
+          { kind: 'note', name: 'Notes', app: 'notes', props: {} },
+          { kind: 'audio', name: 'Mémos vocaux', app: 'voice', props: {} }
+        ]
+      }
+    },
+    order: ['guide', 'espace']
+  }
 };
 
 // ══════════════════════════════════════════════════════════════
