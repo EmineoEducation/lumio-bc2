@@ -447,6 +447,36 @@ Sur la concurrence : « Biostream fait peur. Samsung fait de la techno. Nous, si
     },
     order: ['guide', 'espace']
   }
+,
+  voiceMemos: [
+    {
+      title: "Le chiffre qu'on ne dit pas",
+      author: "Camille Ott",
+      role: "Responsable partenariats B2B",
+      date: "",
+      context: "Verbatim terrain",
+      durationSec: 88,
+      transcript: "Je vais vous dire un truc que vous ne trouverez pas dans le deck board. Le churn annualisé qu'on présente à 4 % — c'est pas le bon chiffre. C'est le churn sur les contrats signés depuis janvier 2025, c'est-à-dire nos meilleurs clients, les plus récents, les plus engagés. Si vous calculez sur la base totale des 180 clients actifs, y compris les comptes qui ralentissent, vous êtes plus près de 9 %. C'est le chiffre que j'utilise dans mes prévisions terrain. Sonia ne veut pas l'entendre parce que ça change l'histoire qu'elle veut raconter au board. Moi je préfère l'anticiper."
+    },
+    {
+      title: "Le client qui doublerait",
+      author: "Camille Ott",
+      role: "Responsable partenariats B2B",
+      date: "",
+      context: "Verbatim terrain",
+      durationSec: 75,
+      transcript: "J'ai un client — je peux pas vous dire son nom mais c'est un grand compte, services financiers, 1 200 salariés — qui m'a dit mot pour mot : \"Le jour où Lumio a sa MDR, on double le périmètre et on passe sur l'offre premium.\" Il attend. Il y en a d'autres comme ça. On a peut-être 8 à 10 comptes B2B qui sont en stand-by sur la MDR pour monter en gamme. Ça représente facilement 600K€ de CA additionnel sur 12 mois, sans aller chercher un seul client nouveau. Est-ce que Sonia a mis ça dans sa projection B2C ? Non. Est-ce que Théo l'a mis dans son argumentaire pour ralentir ? Non plus. C'est dans ma tête."
+    },
+    {
+      title: "Ce que je pense du pivot",
+      author: "Camille Ott",
+      role: "Responsable partenariats B2B",
+      date: "",
+      context: "Verbatim terrain",
+      durationSec: 52,
+      transcript: "Mon opinion sur le pivot B2C ? Trop tôt, mauvaises raisons. On veut faire le B2C parce que le fonds l'a demandé, pas parce qu'on a une proposition de valeur prête. La vraie question c'est : qu'est-ce qu'on dit à un particulier qu'on peut pas dire mieux qu'Apple, avec une marque que personne ne connaît et sans certification médicale ? Je n'ai pas entendu la réponse à cette question dans cette maison."
+    }
+  ]
 };
 
 // ══════════════════════════════════════════════════════════════
